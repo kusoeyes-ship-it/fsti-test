@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSTI 追星灵魂人格测试 | 你是哪种追星怪物？</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #0a0015;
+  color: #e0e0e0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.stars {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at 30% 20%, #1a0a2e 0%, #0a0015 50%, #050010 100%);
+  z-index: -1;
+}
+.star {
+  position: absolute; border-radius: 50%; background: #fff;
+  animation: twinkle 2s ease-in-out infinite alternate;
+}
+@keyframes twinkle { 0% { opacity: 0.15; } 100% { opacity: 0.9; } }
+.container { max-width: 680px; margin: 0 auto; padding: 20px; }
+
+/* 首页 */
+.page { display: none; }
+.page.active { display: block; }
+.title-section { text-align: center; padding: 50px 0 25px; }
+.title-section h1 {
+  font-size: 48px; font-weight: 900;
+  background: linear-gradient(135deg, #ff6bcd, #a855f7, #6366f1, #38bdf8, #ff6bcd);
+  background-size: 200% 200%;
+  animation: gradShift 4s ease infinite;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 8px;
+}
+@keyframes gradShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+.title-section .sub { color: #888; font-size: 14px; margin-bottom: 5px; }
+.title-section .slogan {
+  font-size: 16px; color: #a855f7; margin: 18px 0 8px;
+  text-decoration: line-through; text-decoration-color: #555;
+}
+.title-section .real-slogan {
+  font-size: 21px; color: #ff6bcd; font-weight: bold; line-height: 1.6;
+}
+.disclaimer {
+  background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.25);
+  border-radius: 12px; padding: 15px; margin: 20px 0; font-size: 13px; color: #c4a0e8;
+  line-height: 1.8;
+}
+.start-btn {
+  display: block; width: 80%; max-width: 320px; margin: 28px auto;
+  padding: 16px; font-size: 18px; font-weight: bold;
+  background: linear-gradient(135deg, #a855f7, #ff6bcd);
+  color: #fff; border: none; border-radius: 50px;
+  cursor: pointer; transition: all 0.3s;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.start-btn:hover { transform: scale(1.05); box-shadow: 0 0 35px rgba(168,85,247,0.5); }
+
+/* 测试题 */
+.progress-bar { height: 4px; background: #1a1a2e; border-radius: 2px; margin: 20px 0; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #a855f7, #ff6bcd); border-radius: 2px; transition: width 0.5s; }
+.progress-text { text-align: center; color: #666; font-size: 13px; margin-bottom: 20px; }
+.question-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.15);
+  border-radius: 16px; padding: 28px; margin: 10px 0; animation: fadeIn 0.5s;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.question-text { font-size: 17px; font-weight: bold; margin-bottom: 22px; line-height: 1.7; color: #fff; }
+.option {
+  display: block; width: 100%; padding: 13px 16px; margin: 9px 0;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; color: #ccc; font-size: 14.5px; text-align: left;
+  cursor: pointer; transition: all 0.3s; line-height: 1.5;
+}
+.option:hover { background: rgba(168,85,247,0.15); border-color: #a855f7; color: #fff; transform: translateX(5px); }
+.option.selected { background: rgba(168,85,247,0.22); border-color: #a855f7; color: #fff; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+.prev-btn {
+  padding: 9px 24px; font-size: 13px; color: #888; background: transparent;
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 50px; cursor: pointer; transition: all 0.3s;
+}
+.prev-btn:hover { border-color: #a855f7; color: #a855f7; }
+.prev-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+.nav-hint { font-size: 12px; color: #555; }
+
+/* 结果页 */
+.result-card {
+  text-align: center; padding: 35px 22px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.15);
+  border-radius: 20px; margin: 20px 0;
+}
+.result-emoji { font-size: 72px; margin-bottom: 12px; }
+.result-code { font-size: 32px; font-weight: 900; color: #a855f7; letter-spacing: 3px; }
+.result-name { font-size: 22px; color: #ff6bcd; margin: 6px 0 4px; font-weight: bold; }
+.result-match { font-size: 13px; color: #666; margin-bottom: 18px; }
+.result-desc {
+  font-size: 14.5px; line-height: 2; color: #bbb; text-align: left;
+  padding: 18px; background: rgba(0,0,0,0.3); border-radius: 12px; margin: 14px 0;
+}
+.result-desc strong { color: #a855f7; }
+.result-tagline { font-size: 19px; color: #fff; font-weight: bold; margin: 12px 0; font-style: italic; }
+.dims-section { margin: 22px 0; text-align: left; }
+.dims-section h3 { color: #a855f7; margin-bottom: 14px; font-size: 15px; }
+.dim-row { display: flex; align-items: center; margin: 7px 0; font-size: 12px; }
+.dim-label { width: 78px; color: #888; flex-shrink: 0; }
+.dim-bar { flex: 1; height: 7px; background: #1a1a2e; border-radius: 4px; margin: 0 8px; }
+.dim-fill { height: 100%; border-radius: 4px; transition: width 1s; }
+.dim-val { width: 38px; text-align: right; color: #a855f7; flex-shrink: 0; }
+.retry-btn {
+  display: inline-block; padding: 13px 36px; margin: 18px 8px;
+  background: transparent; border: 2px solid #a855f7; color: #a855f7;
+  border-radius: 50px; font-size: 15px; cursor: pointer; transition: all 0.3s;
+}
+.retry-btn:hover { background: #a855f7; color: #fff; }
+.share-btn {
+  display: inline-block; padding: 13px 36px; margin: 18px 8px;
+  background: linear-gradient(135deg, #ff6bcd, #a855f7); border: none; color: #fff;
+  border-radius: 50px; font-size: 15px; cursor: pointer; transition: all 0.3s;
+}
+.share-btn:hover { transform: scale(1.05); }
+.footer-note { text-align: center; color: #444; font-size: 11px; margin: 28px 0; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="container">
+
+<!-- 首页 -->
+<div class="page active" id="page-home">
+  <div class="title-section">
+    <div class="sub">⚠️ 你的追星方式暴露了你的灵魂 ⚠️</div>
+    <h1>FSTI</h1>
+    <div class="sub">Fandom Soul Type Indicator · 追星灵魂人格指示器</div>
+    <div class="slogan">我只是普通追星而已……</div>
+    <div class="real-slogan">别骗自己了。<br>你追的不是星，是你灵魂深处的执念。</div>
+  </div>
+  <div class="disclaimer">
+    ⚠️ <strong>严正声明</strong>：本测试可能精准到让你怀疑手机被监控。测试结果不可用于粉丝战争弹药、超话举报证据、或脱粉回踩的理由。如测后情绪崩溃，请立即打开爱豆最新物料进行自我疗愈。<br>
+    🔮 本测试采用<strong>饭圈大数据玄学引擎</strong>，融合了你的选择倾向、微博超话活跃指数（虚构）、以及你钱包的哭泣频率，综合运算得出结果。
+  </div>
+  <button class="start-btn" id="btn-start">🎤 测测我是哪种追星怪物</button>
+  <div class="footer-note">共20道饭圈灵魂拷问 · 预计3分钟 · 含24种追星人格 · 可回退修改</div>
+</div>
+
+<!-- 测试页 -->
+<div class="page" id="page-test">
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div class="progress-text" id="progress-text">1 / 20</div>
+  <div id="question-area"></div>
+</div>
+
+<!-- 结果页 -->
+<div class="page" id="page-result">
+  <div id="result-content"></div>
+</div>
+
+</div>
+
+<script>
+// ========== 星空背景（紫色系） ==========
+(function() {
+  const c = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.8;
+    const hue = 260 + Math.random() * 60; // 紫-粉色系星星
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${1.5+Math.random()*3}s;background:hsl(${hue},80%,85%);`;
+    c.appendChild(s);
+  }
+})();
+
+// ========== 15个追星人格维度 ==========
+// data: 氪金力, 数据力, 颜控度, 妈粉值, 女友粉, 毒唯度, 佛系度, 爬墙率, 安利欲, 反黑力, 控评力, 前线力, cp脑, 塌房承受, 理智值
+
+// ========== 20道追星灵魂拷问 ==========
+const questions = [
+  {
+    q: "你的爱豆突然官宣恋爱了，你的第一反应是？",
+    opts: [
+      { text: "手机一摔，微博一关，朋友圈一发：'散了吧家人们，房子塌了。'", scores: {gf:3, drama:2, loyal:1} },
+      { text: "冷静分析对方的家世背景学历长相，看配不配得上我家哥哥/姐姐。", scores: {mom:3, ctrl:2, sane:1} },
+      { text: "无所谓，只要他/她开心就好……（嘴上说着，眼泪已经流到下巴）", scores: {buddha:2, emo:3, mom:1} },
+      { text: "秒切下一个墙头。'天涯何处无芳草，何必单恋一枝花？'", scores: {climb:3, buddha:2, face:1} }
+    ]
+  },
+  {
+    q: "你发现你爱豆的代拍图被P得亲妈都不认识了，而且全网疯传。你会？",
+    opts: [
+      { text: "立刻冲进评论区逐条反驳：'原图在这！！！麻烦看清楚再说话好吗！！！'", scores: {antihate:3, ctrl:2, loyal:1} },
+      { text: "默默保存了原图和P图——等等，P图好像也挺好看的？算了都存了。", scores: {face:3, buddha:2, climb:1} },
+      { text: "气到发抖，连夜写了一篇3000字的长文控诉代拍行业乱象。", scores: {drama:3, antihate:2, data:1} },
+      { text: "转发到粉丝群：'姐妹们上号！！！一人十条给我冲！！！'", scores: {ctrl:3, data:2, antihate:1} }
+    ]
+  },
+  {
+    q: "凌晨三点，你爱豆突然发了一条微博。你当时正在睡觉。",
+    opts: [
+      { text: "什么睡觉？我的微博提醒24小时开着，闹钟都没这个灵。", scores: {data:3, loyal:2, front:1} },
+      { text: "第二天醒来发现自己是第48573个点赞的，瞬间心态崩了。", scores: {data:2, emo:2, ctrl:1} },
+      { text: "睡醒看到了，点个赞，继续刷牙。", scores: {buddha:3, sane:2, climb:1} },
+      { text: "秒醒！不仅点赞转发评论三连，还截图发群里喊姐妹们起来接驾。", scores: {ctrl:3, data:2, loyal:1} }
+    ]
+  },
+  {
+    q: "这个月的工资到账了。你打开购物车，发现爱豆代言的新品上架了。",
+    opts: [
+      { text: "买！买十件！自己用一件，剩下九件安利给全公司。", scores: {krypton:3, shill:2, loyal:1} },
+      { text: "先算一下这个月房租水电吃饭要多少……算了不算了，先买再说。", scores: {krypton:3, emo:1, sane:1} },
+      { text: "看看就好，我追星但我不花钱——好吧我撒谎了，加购了。", scores: {buddha:2, krypton:2, sane:1} },
+      { text: "不买。但我会去各大平台刷好评冲销量，精神氪金也是氪金。", scores: {data:3, ctrl:2, krypton:1} }
+    ]
+  },
+  {
+    q: "你在路上偶遇了你的爱豆本人（不是做梦），你会？",
+    opts: [
+      { text: "大脑死机，嘴巴张开，发出海豚音，然后转身就跑——因为太紧张了。", scores: {gf:3, emo:2, face:1} },
+      { text: "冷静地远远拍一张，然后发超话：'今天运气用完了，出门遇到正主。'", scores: {front:3, sane:2, data:1} },
+      { text: "冲上去：'哥哥/姐姐你今天吃饭了吗？天冷了多穿点！这是我织的围巾！'", scores: {mom:3, front:2, loyal:1} },
+      { text: "假装没看到——因为我素颜出门了，不能让爱豆看到我最丑的样子。", scores: {face:3, gf:2, drama:1} }
+    ]
+  },
+  {
+    q: "你的朋友说你爱豆'长得一般'。",
+    opts: [
+      { text: "当场拉黑，此人已从我的人生中物理删除。", scores: {toxic:3, loyal:2, antihate:1} },
+      { text: "掏出手机翻了四十分钟的高清生图，直到对方被迫说'确实好看'。", scores: {shill:3, face:2, ctrl:1} },
+      { text: "微笑：'每个人审美不同嘛~'（回家后对着爱豆照片哭了两小时）", scores: {emo:3, buddha:2, gf:1} },
+      { text: "无所谓，反正我追的是才华，不是脸。……好吧脸也追。", scores: {sane:2, face:2, buddha:1} }
+    ]
+  },
+  {
+    q: "爱豆生日，你准备了一个月，终于轮到你送生日礼物了。你送什么？",
+    opts: [
+      { text: "手写了一封12页的信+手工相册+编了一首歌——我就是爱豆的妈妈。", scores: {mom:3, loyal:2, emo:1} },
+      { text: "直接包了个五位数的现金红包——爱他/她就给他/她最实际的。", scores: {krypton:3, sane:1, mom:1} },
+      { text: "联合全球粉丝包了一块LED大屏+地铁广告+时代广场投屏。", scores: {data:3, krypton:2, ctrl:1} },
+      { text: "在超话发了一篇催泪小作文，阅读量比礼物重要。", scores: {drama:3, data:2, shill:1} }
+    ]
+  },
+  {
+    q: "你爱豆的对家（竞争对手）发了新歌，而且确实……还不错。",
+    opts: [
+      { text: "好听也不能说好听！关闭页面，立刻去给自家哥哥/姐姐的歌刷播放量！", scores: {toxic:3, data:2, loyal:1} },
+      { text: "偷偷听了三遍，加到了一个叫'不能让姐妹们知道'的歌单里。", scores: {climb:3, face:2, sane:1} },
+      { text: "客观评价：'确实不错，但我家的更好。'——然后被两边粉丝同时骂了。", scores: {sane:3, drama:1, antihate:1} },
+      { text: "内心挣扎了一下，然后默默打开自家的歌循环播放，用数据说话。", scores: {antihate:3, ctrl:2, toxic:1} }
+    ]
+  },
+  {
+    q: "你的爱豆在综艺上被剪辑成了'不合群''耍大牌'的样子。",
+    opts: [
+      { text: "通宵剪了一个澄清视频，配上完整未删减片段，发遍全网。", scores: {antihate:3, data:2, loyal:1} },
+      { text: "冲到节目组官博底下控评，键盘都快被我敲冒烟了。", scores: {ctrl:3, antihate:2, drama:1} },
+      { text: "心疼到嚎啕大哭，发了一条只有自己能看到的朋友圈。", scores: {emo:3, gf:2, mom:1} },
+      { text: "算了，综艺剪辑都这样，翻篇吧。（打开爱豆的饭拍看了一百遍治愈自己）", scores: {buddha:3, sane:2, face:1} }
+    ]
+  },
+  {
+    q: "粉丝群里突然有人说'我觉得XX（另一个爱豆）比咱家的好看'。",
+    opts: [
+      { text: "'踢了踢了！混进来的间谍是吧？管理员呢？！'", scores: {toxic:3, ctrl:2, antihate:1} },
+      { text: "沉默。但默默打开了那个人的主页，截图存证以备后用。", scores: {ctrl:3, drama:2, sane:1} },
+      { text: "发了一张爱豆的绝美生图，配文：'你再说一遍？'", scores: {face:3, shill:2, loyal:1} },
+      { text: "'哈哈确实也挺好看的~不过我还是最喜欢咱家的！'", scores: {buddha:2, sane:2, climb:1} }
+    ]
+  },
+  {
+    q: "你的手机相册里有多少张爱豆的照片？",
+    opts: [
+      { text: "不到一百张。我比较克制，只存精选中的精选。", scores: {sane:3, buddha:2, face:1} },
+      { text: "一千多张。按年份/活动/妆造/表情分了28个文件夹。", scores: {data:3, front:2, face:1} },
+      { text: "我不数了。上次清内存发现爱豆照片占了47G。", scores: {face:3, loyal:2, krypton:1} },
+      { text: "全是截图、饭拍、代拍、路透——我不拍照，我只搬运。", scores: {front:3, data:2, ctrl:1} }
+    ]
+  },
+  {
+    q: "有人问你为什么追这个爱豆，你的回答是？",
+    opts: [
+      { text: "'因为他/她的舞台表现力和作品质量是业内顶级的。'（准备了一份PPT）", scores: {shill:3, data:2, sane:1} },
+      { text: "'因为长得好看啊！！！你看这张！！！还有这张！！！'", scores: {face:3, shill:2, gf:1} },
+      { text: "'因为他/她让我觉得自己也可以变得更好。'（说着说着眼眶红了）", scores: {emo:3, mom:2, loyal:1} },
+      { text: "'说不清楚，反正就是喜欢，不接受反驳。'", scores: {loyal:3, toxic:1, buddha:1} }
+    ]
+  },
+  {
+    q: "你爱豆所在的团体/公司突然宣布解散/合约到期。",
+    opts: [
+      { text: "天塌了。什么工作什么学习，我需要请三天假来处理情绪。", scores: {emo:3, gf:2, loyal:1} },
+      { text: "马上转战爱豆的个人社交账号，继续做数据，阵地不能丢！", scores: {data:3, ctrl:2, loyal:1} },
+      { text: "虽然难过，但尊重他/她的选择。以后不管做什么我都支持。", scores: {mom:3, sane:2, buddha:1} },
+      { text: "早就预感到了。我的下一个墙头已经在排队了。", scores: {climb:3, sane:1, buddha:1} }
+    ]
+  },
+  {
+    q: "你的闺蜜/兄弟开始追跟你同一个爱豆了。你的反应是？",
+    opts: [
+      { text: "太好了！！！终于有人能跟我24小时讨论了！发你一个G的资源包！", scores: {shill:3, front:2, data:1} },
+      { text: "表面高兴，内心莫名紧张——以后粉丝群里又多了个跟我抢前排的人。", scores: {toxic:2, gf:3, ctrl:1} },
+      { text: "立刻建了一个二人小群，每天定时分享物料+行程+安利文案。", scores: {ctrl:3, shill:2, data:1} },
+      { text: "酷，又多一个人帮我打投了。", scores: {data:2, sane:2, buddha:1} }
+    ]
+  },
+  {
+    q: "爱豆的演唱会门票开售了，但你手速不够没抢到。",
+    opts: [
+      { text: "疯狂在官方渠道蹲补票、退票，钱没了可以再赚，演唱会只有一次！", scores: {krypton:3, loyal:2, front:1} },
+      { text: "在家嚎哭一小时，然后蹲在场馆门口听漏出来的声音也好。", scores: {emo:3, gf:2, front:1} },
+      { text: "算了，在家看直播也一样……才怪！！！明年我要开四台手机抢！", scores: {drama:2, data:2, krypton:1} },
+      { text: "秒开二手平台挂求购帖，同时在十五个粉丝群发'有转让的吗？！'", scores: {ctrl:3, data:2, front:1} }
+    ]
+  },
+  {
+    q: "你发现有个私生饭长期跟踪你的爱豆，偷拍日常。",
+    opts: [
+      { text: "报警+联系工作室+超话发通告+号召全网抵制，一条龙服务。", scores: {antihate:3, ctrl:2, sane:1} },
+      { text: "虽然照片很清晰……但绝对不能因为图好看就纵容！坚决抵制私生！", scores: {face:3, climb:2, drama:1} },
+      { text: "气到血压飙升，连续三天在各平台举报私生账号，一个都不放过。", scores: {antihate:2, drama:3, toxic:1} },
+      { text: "心疼爱豆。默默在小号写了一篇'请给他/她私人空间'的呼吁文。", scores: {mom:3, emo:2, sane:1} }
+    ]
+  },
+  {
+    q: "你的爱豆突然关注了一个异性网红，评论区已经炸了。",
+    opts: [
+      { text: "冲到那个网红主页研究了对方三百条动态，确认'只是工作关系'后松了口气。", scores: {gf:3, ctrl:2, drama:1} },
+      { text: "在自家超话发了一篇'大家理智追星，不要过度解读'的长文。", scores: {sane:3, ctrl:2, buddha:1} },
+      { text: "不管了，先去这个网红底下控评'谢谢你关注我家哥哥/姐姐'。", scores: {ctrl:3, data:2, toxic:1} },
+      { text: "又塌了？行吧，我已经塌习惯了。（点开外卖APP自我安慰）", scores: {buddha:3, emo:1, climb:1} }
+    ]
+  },
+  {
+    q: "你追了三年的爱豆最近作品质量明显下滑，你会？",
+    opts: [
+      { text: "依然无条件支持！数据照做！安利照发！爱豆永远是对的！", scores: {loyal:3, data:2, toxic:1} },
+      { text: "在超话婉转地提了一嘴'希望团队能用点心'，被粉丝围攻了。", scores: {sane:3, drama:2, antihate:1} },
+      { text: "难过。但我追的是这个人，不是作品。陪他/她一起成长。", scores: {mom:3, emo:2, loyal:1} },
+      { text: "悄悄减少了打投力度，把多出来的时间分给了新墙头。", scores: {climb:3, sane:2, buddha:1} }
+    ]
+  },
+  {
+    q: "有人嘲笑你追星是'把钱和时间浪费在一个不认识你的人身上'。",
+    opts: [
+      { text: "笑了。我追星赚的快乐比你一辈子赚的都多，你管得着吗？", scores: {sane:3, loyal:2, drama:1} },
+      { text: "委屈到哭。他们不懂追星带给我的力量和意义。", scores: {emo:3, gf:2, mom:1} },
+      { text: "无视。跟不追星的人解释追星，等于跟鱼解释爬树。", scores: {buddha:3, sane:2, toxic:1} },
+      { text: "反手给对方做了一个安利PPT，企图把对方也拉下水。", scores: {shill:3, ctrl:2, data:1} }
+    ]
+  },
+  {
+    q: "最后一题：你觉得你和爱豆之间的关系，最像什么？",
+    opts: [
+      { text: "我是他/她的远房老母亲，操碎了一颗心。", scores: {mom:3, emo:2, loyal:1} },
+      { text: "我是他/她的在逃经纪人，数据、公关、危机处理我全包。", scores: {data:3, ctrl:2, antihate:1} },
+      { text: "我是他/她不知道存在的灵魂伴侣——单方面的。", scores: {gf:3, emo:2, face:1} },
+      { text: "我是一只在花丛中飞来飞去的蜜蜂——今天采这朵，明天采那朵。", scores: {climb:3, buddha:2, sane:1} }
+    ]
+  }
+];
+
+// ========== 24种追星灵魂人格 ==========
+const results = [
+  {
+    code: "DATA-G", name: "数据女工/男工", emoji: "⌨️",
+    tagline: "'今天你打投了吗？没有的话不要跟我说话。'",
+    dims: {data:95, ctrl:85, loyal:75, krypton:60, sane:40},
+    desc: "你追星的方式不是追，是<strong>上班</strong>。超话签到、转发抽奖、控评反黑、打榜投票，你的追星日程比公司KPI还严格。你的手机里有8个小号，每个都有独立的使命。你不是在追星，你是在<strong>经营一家上市公司</strong>。"
+  },
+  {
+    code: "KRYP-T", name: "氪金战神", emoji: "💳",
+    tagline: "'花呗欠了多少？这是爱豆和我之间的秘密。'",
+    dims: {krypton:95, loyal:80, face:65, front:60, data:50},
+    desc: "你的钱包是追星的第一受害者。专辑买十张、代言全入、周边秒杀、演唱会VIP——你用真金白银表达爱意。你的理财方式就是<strong>'爱豆出啥我买啥'</strong>。信用卡账单是你追星路上最沉重的勋章。"
+  },
+  {
+    code: "MOM-F", name: "老母亲粉", emoji: "🧶",
+    tagline: "'宝宝今天吃饭了吗？天冷了穿秋裤了吗？'",
+    dims: {mom:95, emo:80, loyal:75, sane:60, gf:40},
+    desc: "你追的不是偶像，你追的是<strong>你想保护的孩子</strong>。看到爱豆瘦了你心疼，看到爱豆累了你落泪，看到爱豆被骂你拼命。你的爱是无条件的母爱，虽然你可能比爱豆还小三岁。你的口头禅是：<strong>'我不需要他认识我，我只需要他过得好。'</strong>"
+  },
+  {
+    code: "GF-DX", name: "女友粉/男友粉", emoji: "💕",
+    tagline: "'我们只是还没官宣而已。'",
+    dims: {gf:95, face:80, emo:75, drama:65, toxic:50},
+    desc: "你和爱豆之间隔着一个屏幕、一千个保镖和法律。但这不妨碍你在脑内跟他/她已经结婚生子买了学区房。爱豆跟异性同框你就心梗，爱豆笑着看镜头你觉得他/她在看你。你的追星状态是<strong>精神恋爱，单方面的那种</strong>。"
+  },
+  {
+    code: "FACE-K", name: "颜狗", emoji: "🤩",
+    tagline: "'我不管他/她做了什么，只要长得好看一切都可以原谅。'",
+    dims: {face:95, climb:70, gf:65, front:60, sane:35},
+    desc: "你追星的唯一标准就是<strong>脸</strong>。业务能力？作品质量？人品？这些都是次要的。你的相册里99%是高清怼脸生图，你能精准分辨爱豆在不同光线下的颧骨阴影角度。你不是粉丝，你是<strong>行走的人脸识别高精度扫描仪</strong>。"
+  },
+  {
+    code: "BUDD-A", name: "佛系老粉", emoji: "🧘",
+    tagline: "'追星嘛，开心就好，不必太认真。'",
+    dims: {buddha:95, sane:85, climb:65, loyal:50, data:30},
+    desc: "你追星的方式就是<strong>不追</strong>。不打投、不控评、不反黑、不氪金，但爱豆的每首歌你都听过、每个综艺你都看过。你是粉丝群里最安静的那个人，但粉龄比管理员还长。你的追星哲学是：<strong>缘分到了自然会见面，强求的都是私生。</strong>"
+  },
+  {
+    code: "WALL-C", name: "职业爬墙选手", emoji: "🧗",
+    tagline: "'我不是花心，我是博爱。'",
+    dims: {climb:95, face:80, buddha:70, sane:55, loyal:25},
+    desc: "你的本命列表比通讯录还长。你平均每三个月换一个最爱的爱豆，但你从不觉得自己是三心二意——你只是<strong>爱得太广泛了</strong>。你的超话关注列表跨越日韩中泰四国，横跨唱跳演说各个领域。粉丝群里的人叫你'旅游粉'，你叫自己<strong>'多元化投资人'</strong>。"
+  },
+  {
+    code: "TOXC-U", name: "毒唯本唯", emoji: "☠️",
+    tagline: "'全世界只有我家哥哥/姐姐配拥有一切。'",
+    dims: {toxic:95, loyal:90, antihate:80, ctrl:75, drama:60},
+    desc: "你的爱是一把刀——朝外的那种。谁敢说你爱豆一句不好你就跟谁急。你对自家爱豆的保护欲已经溢出屏幕了，虽然有时候用力过猛，但出发点都是爱。你不是粉丝，你是爱豆的<strong>人形护盾，防御力MAX</strong>。"
+  },
+  {
+    code: "SHIL-L", name: "安利狂魔", emoji: "📢",
+    tagline: "'你听说过我家爱豆吗？没有？那你现在知道了。'",
+    dims: {shill:95, face:80, data:70, ctrl:65, drama:55},
+    desc: "你的人生使命就是让全世界都知道你爱豆有多好。你的朋友圈已经被屏蔽了，你的同事听到你开口说话就逃跑了，但你不在乎——<strong>传教的路上总是孤独的</strong>。你随身携带安利物料，包括但不限于代表作合集、高清生图精选和一篇你写了一周的入坑指南。"
+  },
+  {
+    code: "ANTI-H", name: "反黑斗士", emoji: "🛡️",
+    tagline: "'只要我还有一口气，就没人能黑我家爱豆。'",
+    dims: {antihate:95, ctrl:80, drama:75, data:70, loyal:65},
+    desc: "你是爱豆的<strong>人形防火墙</strong>。你的手机备忘录里存了两百条标准反黑话术，你的微博收藏夹全是举报教程。你的一天从搜索爱豆名字开始，到逐条消灭负面评论结束。你不追星，你<strong>上班</strong>——而且没有工资、没有加班费、全年无休。"
+  },
+  {
+    code: "CTRL-P", name: "控评总指挥", emoji: "🎖️",
+    tagline: "'姐妹们！一人十条！格式统一！不许带emoji！上！'",
+    dims: {ctrl:95, data:90, antihate:80, loyal:70, toxic:55},
+    desc: "你是粉丝群的<strong>灵魂人物和精神领袖</strong>。每次有通稿你第一个发控评格式，每次有热搜你第一个安排话术。你的管理能力强到可以去当CEO，但你选择了把才华奉献给爱豆的评论区。你的组织协调能力令人叹为观止——<strong>联合国应该高薪聘请你</strong>。"
+  },
+  {
+    code: "FRNT-L", name: "前线战地记者", emoji: "📸",
+    tagline: "'只要爱豆出现在方圆五公里内，我就在。'",
+    dims: {front:95, krypton:80, face:75, data:65, loyal:60},
+    desc: "你是追星届的<strong>战地记者</strong>。任何公开活动你都在现场第一排，你的相机比你的脸更经常出现在爱豆面前。你坐过最早的航班、排过最长的队、淋过最大的雨——只为了那<strong>几秒钟的对视（可能是你的幻觉）</strong>。你的行李箱里永远有一台备用相机和三块充满的电池。"
+  },
+  {
+    code: "EMO-S", name: "emo追星人", emoji: "🥹",
+    tagline: "'一想到爱豆有一天会退休，我现在就开始哭了。'",
+    dims: {emo:95, gf:80, mom:75, loyal:70, drama:60},
+    desc: "你追星的方式就是<strong>哭</strong>。看到爱豆的舞台哭，看到爱豆受委屈哭，看到爱豆笑也哭——因为笑容太治愈了。你发的每条超话帖子都自带800字小作文和三个哭泣emoji。你不是粉丝，你是爱豆的<strong>专属泪腺</strong>。"
+  },
+  {
+    code: "DRAM-Q", name: "饭圈戏精", emoji: "🎭",
+    tagline: "'追星不发疯，和咸鱼有什么区别？'",
+    dims: {drama:95, emo:80, ctrl:70, shill:65, gf:55},
+    desc: "你追星的动静比爱豆本人还大。你发过的超话长文能出一本书，你在粉丝群里吵过的架能拍一部电视剧。你永远是话题中心——无论是夸爱豆还是跟人激情辩论。你的人生格言：<strong>追星就要轰轰烈烈，悄无声息不如不追</strong>。"
+  },
+  {
+    code: "SANE-R", name: "理智粉代表", emoji: "🧐",
+    tagline: "'我追星，但我不疯。……大部分时候。'",
+    dims: {sane:95, buddha:80, mom:65, data:50, loyal:45},
+    desc: "你是饭圈里的<strong>稀有物种</strong>——一个有脑子的粉丝。你支持爱豆但不盲目，你花钱但有预算，你反黑但不参与骂战。你经常在粉丝群里扮演'冷静的那个人'，并因此被两个极端同时攻击。你的存在证明了：<strong>追星和保持理智可以共存，虽然很难</strong>。"
+  },
+  {
+    code: "LOYAL-D", name: "死忠铁粉", emoji: "🔒",
+    tagline: "'从入坑到入土，至死方休。'",
+    dims: {loyal:95, mom:80, emo:75, data:65, krypton:60},
+    desc: "你追爱豆的年份比某些粉丝的年龄还大。不管爱豆红不红、作品好不好、有没有黑料，你都在。你是超话里最老的那个ID，是每次爱豆遇到危机时第一个站出来的人。你的爱不需要理由，也不接受反驳：<strong>'我就是喜欢，你管得着吗？'</strong>"
+  },
+  // 17-24: 新增极品追星人格
+  {
+    code: "CP-BR", name: "CP脑患者", emoji: "💞",
+    tagline: "'他们之间的眼神交流，我能写三万字同人文。'",
+    dims: {drama:90, gf:85, face:80, climb:70, emo:65},
+    desc: "你追的不是一个人，你追的是<strong>一对</strong>。你能在两个人同框0.5秒的画面里提取出47个糖点，并将其发展成一部完整的言情小说。你的浏览器永远开着AO3和LOFTER，你的写作速度在同人圈排名前三。你不是粉丝，你是<strong>爱情的考古学家</strong>。"
+  },
+  {
+    code: "ZOMBIE", name: "塌房幸存者", emoji: "🏚️",
+    tagline: "'别人塌房哭天抢地，我塌房面不改色——因为已经习惯了。'",
+    dims: {buddha:90, sane:85, climb:80, emo:70, loyal:40},
+    desc: "你经历过的塌房次数已经可以出一本《粉丝灾后重建指南》了。从恋爱塌、到人品塌、到业务塌，你全经历过。现在的你已经进化成了<strong>追星界的打不死的小强</strong>——塌就塌吧，反正明天还有新墙头。你的情绪恢复速度比5G还快。"
+  },
+  {
+    code: "GHOST", name: "透明追星人", emoji: "👤",
+    tagline: "'我追星，但没有人知道我追星。'",
+    dims: {buddha:90, sane:80, face:70, loyal:65, data:30},
+    desc: "你是追星界的<strong>幽灵</strong>。你从不发超话、不进粉丝群、不买周边、不去现场——但你把爱豆所有的作品都看了三遍以上。你的追星全程在小号和无痕浏览器中完成。你最大的恐惧不是爱豆塌房，而是<strong>被同事发现你追星</strong>。"
+  },
+  {
+    code: "RICH-M", name: "富婆/富哥粉", emoji: "👑",
+    tagline: "'钱解决不了的追星问题，那是钱不够多。'",
+    dims: {krypton:95, front:90, ctrl:75, shill:70, sane:55},
+    desc: "你追星不看预算，只看效果。前排票？买。限量周边？全包。爱豆代言？每样十件起。你是品牌方最爱的粉丝类型，也是爱豆工作室数据报表上最亮的那颗星。你用实际行动证明了：<strong>有钱人的追星快乐，你根本想象不到</strong>。"
+  },
+  {
+    code: "SLEEP", name: "养老追星人", emoji: "🛋️",
+    tagline: "'我还在追吗？大概……算是吧。'",
+    dims: {buddha:95, sane:90, climb:60, loyal:55, data:20},
+    desc: "你曾经也疯狂过，但现在已经进入<strong>追星退休模式</strong>。你不再打投、不再控评、不再蹲直播。偶尔刷到爱豆的新闻会点个赞，看到好看的图会默默保存。你跟爱豆的关系就像一段<strong>已经过了热恋期但还没分手的感情</strong>——淡淡的，但还在。"
+  },
+  {
+    code: "MULTI", name: "全能型追星战士", emoji: "⚔️",
+    tagline: "'打投我来、反黑我来、控评我来、前线我也来。累吗？不累。'",
+    dims: {data:90, antihate:90, ctrl:85, front:80, krypton:75},
+    desc: "你一个人就是一支军队。别人分工合作的事情，你一个人全干了。你白天做数据，晚上反黑，周末蹲前线，月底还要氪金冲销量。你的追星强度已经超过了大部分人的工作强度。你不是粉丝，你是爱豆的<strong>一人运营团队（无薪）</strong>。"
+  },
+  {
+    code: "CASH-C", name: "事业粉", emoji: "📊",
+    tagline: "'别跟我聊感情，我只关心他/她的商业价值和事业发展。'",
+    dims: {sane:90, data:85, ctrl:80, antihate:70, krypton:60},
+    desc: "你追的不是人，你追的是一个<strong>商业项目</strong>。你关心的不是爱豆今天好不好看，而是今天的代言数据涨了没、新歌打榜排名几、综艺播放量破亿了没。你的Excel里有一张爱豆商业价值分析表，你比爱豆经纪人还懂市场。你是饭圈里的<strong>华尔街分析师</strong>。"
+  },
+  {
+    code: "WRITE", name: "产出型选手", emoji: "✍️",
+    tagline: "'爱豆给我灵感，我给爱豆写同人，各取所需，完美闭环。'",
+    dims: {drama:90, emo:85, face:80, shill:70, sane:55},
+    desc: "你追星的方式是<strong>创作</strong>。你写过小说、画过同人图、剪过混剪视频、做过表情包。你的产出量比爱豆官方还勤快。你在圈内有自己的粉丝，有时候你都分不清别人关注你是因为你的作品还是因为你的爱豆。你是饭圈的<strong>文艺复兴时期的达芬奇</strong>。"
+  }
+];
+
+// ========== 测试逻辑 ==========
+let currentQ = 0;
+let answers = [];
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function calcScores() {
+  const s = {};
+  answers.forEach((ans, qi) => {
+    if (ans >= 0 && questions[qi]) {
+      const opt = questions[qi].opts[ans];
+      for (let k in opt.scores) { s[k] = (s[k] || 0) + opt.scores[k]; }
+    }
+  });
+  return s;
+}
+
+function startTest() {
+  currentQ = 0;
+  answers = new Array(questions.length).fill(-1);
+  showPage('page-test');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const area = document.getElementById('question-area');
+  document.getElementById('progress').style.width = ((currentQ+1)/questions.length*100)+'%';
+  document.getElementById('progress-text').textContent = `${currentQ+1} / ${questions.length}`;
+  const prev = answers[currentQ];
+  let html = `<div class="question-card"><div class="question-text">${q.q}</div>`;
+  q.opts.forEach((o,i) => {
+    html += `<button class="option${i===prev?' selected':''}" data-idx="${i}">${o.text}</button>`;
+  });
+  html += `<div class="nav-row"><button class="prev-btn" id="btn-prev" ${currentQ===0?'disabled':''}>⬅ 上一题</button><span class="nav-hint">点选项前进 · 可回退修改</span></div></div>`;
+  area.innerHTML = html;
+  area.querySelectorAll('.option').forEach(b => {
+    b.addEventListener('click', function(){ selectOption(parseInt(this.dataset.idx)); });
+  });
+  const pb = document.getElementById('btn-prev');
+  if(pb && currentQ>0) pb.addEventListener('click', goPrev);
+}
+
+function selectOption(idx) {
+  answers[currentQ] = idx;
+  currentQ++;
+  if(currentQ < questions.length) renderQuestion(); else showResult();
+}
+
+function goPrev() { if(currentQ>0){ currentQ--; renderQuestion(); } }
+
+function showResult() {
+  const scores = calcScores();
+  let best = null, bestS = -1;
+  results.forEach(r => {
+    let s=0, m=0;
+    for(let k in r.dims){ s += (scores[k]||0)*(r.dims[k]/100); m += 20*(r.dims[k]/100); }
+    const pct = Math.min(99, Math.round(55+(s/Math.max(m,1))*44));
+    if(s > bestS){ bestS=s; best={...r, matchPct:pct}; }
+  });
+  const r = best;
+  const dn = {
+    krypton:'氪金力', data:'数据力', face:'颜控度', mom:'妈粉值', gf:'恋爱脑',
+    toxic:'毒唯度', buddha:'佛系度', climb:'爬墙率', shill:'安利欲', antihate:'反黑力',
+    ctrl:'控评力', front:'前线力', drama:'戏精值', emo:'emo值', sane:'理智值',
+    loyal:'忠诚度'
+  };
+  const dc = {
+    krypton:'#ffd93d', data:'#38bdf8', face:'#ff6bcd', mom:'#6bcb77', gf:'#ff6b6b',
+    toxic:'#9333ea', buddha:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
+    ctrl:'#3b82f6', front:'#a855f7', drama:'#ec4899', emo:'#60a5fa', sane:'#10b981',
+    loyal:'#f59e0b'
+  };
+  let dh = '';
+  const dims = ['krypton','data','face','mom','gf','toxic','buddha','climb','shill','antihate','ctrl','front','drama','emo','sane','loyal'];
+  dims.forEach(d => {
+    if(!dn[d]) return;
+    const v = Math.min(99, Math.max(5, Math.round((scores[d]||0)/20*100+Math.random()*12)));
+    dh += `<div class="dim-row"><span class="dim-label">${dn[d]}</span><div class="dim-bar"><div class="dim-fill" style="width:${v}%;background:${dc[d]||'#a855f7'}"></div></div><span class="dim-val">${v}%</span></div>`;
+  });
+
+  document.getElementById('result-content').innerHTML = `
+    <div class="result-card">
+      <div class="result-emoji">${r.emoji}</div>
+      <div class="result-code">${r.code}</div>
+      <div class="result-name">${r.name}</div>
+      <div class="result-match">灵魂匹配度 ${r.matchPct}% · 饭圈大数据玄学定位</div>
+      <div class="result-tagline">${r.tagline}</div>
+      <div class="result-desc">${r.desc}</div>
+      <div class="dims-section">
+        <h3>🎤 十六维追星人格落点</h3>
+        ${dh}
+      </div>
+      <button class="retry-btn" id="btn-retry">🔄 不服再测一次</button>
+      <button class="share-btn" id="btn-share">📤 分享给饭圈姐妹</button>
+    </div>
+    <div class="disclaimer" style="margin-top:20px;">
+      ⚠️ <strong>温馨提示</strong>：本结果由饭圈玄学引擎v1.0生成。如果你觉得不准，说明你还没认清自己的追星本质。如果你觉得准，那恭喜你——<strong>你已经没救了，但饭圈欢迎你</strong>。
+    </div>
+    <div class="footer-note">
+      FSTI · Fandom Soul Type Indicator · 追星灵魂人格指示器<br>
+      灵感来源：SBTI测试 · 本测试纯属饭圈整活<br>
+      仅供娱乐，请勿用于粉丝战争、超话举报或脱粉回踩<br>
+      © 2026 FSTI · 你追的不是星，是你自己
+    </div>
+  `;
+  showPage('page-result');
+  document.getElementById('btn-retry').addEventListener('click', startTest);
+  document.getElementById('btn-share').addEventListener('click', function(){
+    alert('截图分享给你的饭圈姐妹/兄弟吧！看看他们是哪种追星怪物 🎤');
+  });
+}
+
+// ========== 初始化 ==========
+document.getElementById('btn-start').addEventListener('click', startTest);
+</script>
+</body>
+</html>
