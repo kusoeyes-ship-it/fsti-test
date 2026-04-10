@@ -673,66 +673,115 @@ function showResult() {
     if(s > bestS){ bestS=s; best={...r, matchPct:pct}; }
   });
   const r = best;
-  const dn = {
-    krypton:'应援力', data:'数据力', face:'颜控度', mom:'妈粉值', gf:'心动值',
-    toxic:'专一度', chill:'淡定度', climb:'爬墙率', shill:'安利欲', antihate:'反黑力',
-    ctrl:'组织力', front:'前线力', drama:'戏精值', emo:'emo值', sane:'理智值',
-    loyal:'忠诚度'
-  };
-  const dc = {
-    krypton:'#ffd93d', data:'#38bdf8', face:'#ff6bcd', mom:'#6bcb77', gf:'#ff6b6b',
-    toxic:'#9333ea', chill:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
-    ctrl:'#3b82f6', front:'#a855f7', drama:'#ec4899', emo:'#60a5fa', sane:'#10b981',
-    loyal:'#f59e0b'
-  };
-  let dh = '';
-  const dims = ['krypton','data','face','mom','gf','toxic','chill','climb','shill','antihate','ctrl','front','drama','emo','sane','loyal'];
-  dims.forEach(d => {
-    if(!dn[d]) return;
-    const v = Math.min(99, Math.max(5, Math.round((scores[d]||0)/20*100+Math.random()*12)));
-    dh += `<div class="dim-row"><span class="dim-label">${dn[d]}</span><div class="dim-bar"><div class="dim-fill" style="width:${v}%;background:${dc[d]||'#a855f7'}"></div></div><span class="dim-val">${v}%</span></div>`;
-  });
+
+  // 六维数据
+  const dn={krypton:'应援',data:'数据',face:'颜控',mom:'关爱',gf:'心动',toxic:'专一',chill:'淡定',climb:'探索',shill:'安利',antihate:'守护',ctrl:'组织',front:'前线',drama:'表达',emo:'情感',sane:'理智',loyal:'忠诚'};
+  const allDims=Object.keys(dn);
+  const dimVals=allDims.map(d=>({k:d,v:Math.min(99,Math.max(8,Math.round((scores[d]||0)/20*100+Math.random()*12)))})).sort((a,b)=>b.v-a.v);
+  const top6=dimVals.slice(0,6);
+
+  // 生成SVG雷达图
+  const svgSize=240, cx=svgSize/2, cy=svgSize/2, radius=90;
+  const sides=6, startAngle=-Math.PI/2;
+  let gridSVG='', axisSVG='', dataSVG='', dotsSVG='', labelsSVG='';
+  // 网格
+  for(let layer=1;layer<=3;layer++){
+    const lr=radius*layer/3;
+    let pts=[];
+    for(let i=0;i<sides;i++){const a=startAngle+i*Math.PI*2/sides; pts.push((cx+Math.cos(a)*lr).toFixed(1)+','+(cy+Math.sin(a)*lr).toFixed(1));}
+    gridSVG+='<polygon points="'+pts.join(' ')+'" fill="none" stroke="rgba(168,85,247,'+(0.08+layer*0.04)+')" stroke-width="1"/>';
+  }
+  // 轴线+标签
+  for(let i=0;i<sides;i++){
+    const a=startAngle+i*Math.PI*2/sides;
+    axisSVG+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+Math.cos(a)*radius).toFixed(1)+'" y2="'+(cy+Math.sin(a)*radius).toFixed(1)+'" stroke="rgba(168,85,247,0.08)" stroke-width="1"/>';
+    const lx=cx+Math.cos(a)*(radius+22), ly=cy+Math.sin(a)*(radius+22);
+    labelsSVG+='<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="middle" fill="rgba(255,255,255,0.45)" font-size="11" font-weight="500">'+dn[top6[i].k]+'</text>';
+  }
+  // 数据多边形
+  let dataPts=[];
+  for(let i=0;i<sides;i++){
+    const a=startAngle+i*Math.PI*2/sides;
+    const r2=radius*top6[i].v/100;
+    dataPts.push((cx+Math.cos(a)*r2).toFixed(1)+','+(cy+Math.sin(a)*r2).toFixed(1));
+    dotsSVG+='<circle cx="'+(cx+Math.cos(a)*r2).toFixed(1)+'" cy="'+(cy+Math.sin(a)*r2).toFixed(1)+'" r="3" fill="#a855f7"/>';
+  }
+  dataSVG='<polygon points="'+dataPts.join(' ')+'" fill="rgba(168,85,247,0.12)" stroke="#a855f7" stroke-width="1.5"/>';
+
+  const radarSVG='<svg viewBox="0 0 '+svgSize+' '+svgSize+'" width="'+svgSize+'" height="'+svgSize+'" style="display:block;margin:0 auto;">'+gridSVG+axisSVG+dataSVG+dotsSVG+labelsSVG+'</svg>';
+
+  // 生成标签
+  const tagNames={krypton:'应援型',data:'数据型',face:'颜控型',mom:'关爱型',gf:'心动型',toxic:'专一型',chill:'淡定型',climb:'探索型',shill:'安利型',antihate:'守护型',ctrl:'组织型',front:'前线型',drama:'表达型',emo:'情感型',sane:'理智型',loyal:'忠诚型'};
+  const topTags=dimVals.slice(0,3).map(d=>'#'+tagNames[d.k]);
+  const weakTag=dimVals[dimVals.length-1];
+
+  // 趣味隐藏属性
+  const funFacts=[
+    {label:'追星战斗力', val:Math.min(99,top6[0].v+Math.floor(Math.random()*10)), icon:'⚡'},
+    {label:'钱包安全指数', val:Math.max(5,100-dimVals.find(d=>d.k==='krypton').v), icon:'💰'},
+    {label:'社交隐身等级', val:Math.max(5,100-dimVals.find(d=>d.k==='shill').v), icon:'👤'},
+  ];
 
   document.getElementById('result-content').innerHTML = `
     <div class="result-card">
-      <div class="result-emoji"><img src="${AVATAR_MAP[r.code] || ''}" style="width:160px;height:160px;border-radius:50%;border:3px solid rgba(168,85,247,0.3);background:#fff;object-fit:cover;" onerror="this.style.display='none';this.nextSibling.style.display='block'"><span style="display:none;font-size:72px">${r.emoji}</span></div>
+
+      <div style="text-align:center;margin-bottom:24px;">
+        <img src="${AVATAR_MAP[r.code] || ''}" style="width:140px;height:140px;border-radius:50%;border:2px solid rgba(168,85,247,0.2);background:#111;object-fit:cover;" onerror="this.style.display='none'">
+      </div>
+
       <div class="result-code">${r.code}</div>
       <div class="result-name">${r.name}</div>
-      <div class="result-match">灵魂匹配度 ${r.matchPct}% · 追星大数据玄学定位</div>
-      <div class="result-tagline">${r.tagline}</div>
-      <div class="result-desc">${r.desc}</div>
-      <div class="dims-section">
-        <h3>🎤 十六维追星人格落点</h3>
-        ${dh}
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 20px;">
+        ${topTags.map(t=>'<span style="padding:5px 14px;font-size:12px;font-weight:500;color:#a855f7;border:1px solid rgba(168,85,247,0.3);letter-spacing:1px;">'+t+'</span>').join('')}
       </div>
-      <button class="retry-btn" id="btn-retry">🔄 不服再测一次</button>
-      <button class="poster-btn" id="btn-poster">🖼️ 生成分享海报</button>
-      <button class="share-btn" id="btn-share">📤 截图分享</button>
-      <a href="https://y.qq.com/n3/venus/pages/ism_event_detail/index.html?_hidehd=1&_fontscale=1&event_id=100968&_miniplayer=1&ADTAG=nr_ai_huodong_fsti" target="_blank" style="display:inline-block;padding:13px 36px;margin:18px 8px;background:linear-gradient(135deg,#ffd93d,#f97316);border:none;color:#1a1a2e;border-radius:50px;font-size:15px;font-weight:bold;cursor:pointer;transition:all 0.3s;text-decoration:none;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🎵 做一首应援曲形容我</a>
+
+      <div class="result-match">匹配度 ${r.matchPct}%</div>
+
+      <div class="result-tagline">${r.tagline}</div>
+
+      <div class="result-desc">${r.desc}</div>
+
+      <div style="margin:32px 0;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:4px;color:rgba(168,85,247,0.5);text-transform:uppercase;margin-bottom:16px;">SOUL RADAR</div>
+        ${radarSVG}
+      </div>
+
+      <div style="margin:24px 0;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:4px;color:rgba(168,85,247,0.5);text-transform:uppercase;margin-bottom:16px;">HIDDEN STATS</div>
+        ${funFacts.map(f=>'<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:14px;color:rgba(255,255,255,0.5);font-weight:400;">'+f.icon+' '+f.label+'</span><span style="font-size:14px;font-weight:600;color:#a855f7;">'+f.val+'%</span></div>').join('')}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+          <span style="font-size:14px;color:rgba(255,255,255,0.5);font-weight:400;">🫣 最弱属性</span>
+          <span style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.25);">${dn[weakTag.k]} ${weakTag.v}%</span>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="retry-btn" id="btn-retry">再测一次</button>
+        <button class="poster-btn" id="btn-poster">生成海报</button>
+        <button class="share-btn" id="btn-share">截图分享</button>
+      </div>
+
+      <a href="https://y.qq.com/n3/venus/pages/ism_event_detail/index.html?_hidehd=1&_fontscale=1&event_id=100968&_miniplayer=1&ADTAG=nr_ai_huodong_fsti" target="_blank" style="display:block;width:100%;max-width:360px;padding:16px 0;margin:8px 0 24px;font-size:12px;font-weight:600;letter-spacing:2px;text-align:center;color:#050508;background:#a855f7;text-decoration:none;text-transform:uppercase;transition:all 0.3s;" onmouseover="this.style.background='#c084fc'" onmouseout="this.style.background='#a855f7'">🎵 做一首应援曲形容我</a>
+
       <div class="qr-section">
         <img src="${QR_SRC}" alt="扫码测试">
-        <p>扫码或长按识别<br>测测你是哪种追星人格</p>
+        <div class="qr-text">扫码或长按识别<br>邀请朋友一起鉴定追星人格</div>
       </div>
     </div>
-    <div class="disclaimer" style="margin-top:20px;">
-      ⚠️ <strong>温馨提示</strong>：本结果由追星玄学引擎v1.0生成。如果你觉得不准，说明你还没认清自己的追星本质。如果你觉得准，那恭喜你——<strong>追星的方式千万种，开心最重要</strong>。
-    </div>
-    <div class="footer-note">
-      FSTI · Fandom Soul Type Indicator · 追星灵魂人格指示器<br>
-      灵感来源：SBTI测试 · 本测试纯属娱乐整活<br>
-      仅供娱乐，倡导理性追星、文明追星<br>
-      © 2026 FSTI · 你追的不是星，是你自己
+
+    <div style="font-size:11px;font-weight:400;color:rgba(255,255,255,0.15);margin:24px 0;letter-spacing:1px;line-height:1.8;">
+      FSTI · Fandom Soul Type Indicator<br>
+      仅供娱乐，倡导理性追星、文明追星
     </div>
     <img class="brand-logo" src="${LOGO_SRC}" alt="QQ音乐">
-    <div class="brand-text"></div>
   `;
   showPage('page-result');
   document.getElementById('btn-retry').addEventListener('click', startTest);
   document.getElementById('btn-share').addEventListener('click', function(){
-    alert('截图分享给你的追星搭子/兄弟吧！看看他们是哪种追星人格 🎤');
+    alert('截图分享给你的追星搭子吧！看看他们是哪种追星人格 🎤');
   });
-  // 生成海报按钮
-  document.getElementById('btn-poster').addEventListener('click', function(){ generatePoster(r, scores, dh); });
+  document.getElementById('btn-poster').addEventListener('click', function(){ generatePoster(r, scores, ''); });
 }
 
 // ========== 二维码 base64 ==========
