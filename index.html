@@ -172,7 +172,7 @@ body {
   color: transparent;
   -webkit-text-stroke: 1.5px rgba(168,85,247,0.25);
   animation: watermarkBreath 3s ease-in-out infinite, watermarkFlow 4s linear infinite;
-  pointer-events: none; z-index: 10; user-select: none;
+  pointer-events: none; z-index: 999; user-select: none;
 }
 @keyframes watermarkBreath {
   0%{ -webkit-text-stroke-color: rgba(168,85,247,0.15); }
@@ -190,7 +190,6 @@ body {
 </head>
 <body>
 <div class="stars" id="stars"></div>
-<div class="fsti-watermark">FSTI</div>
 <div class="container">
 
 <!-- 首页 -->
@@ -885,5 +884,6 @@ document.getElementById('btn-poster-save').addEventListener('click', function(){
   link.click();
 });
 </script>
+<div class="fsti-watermark">FSTI</div>
 </body>
 </html>
