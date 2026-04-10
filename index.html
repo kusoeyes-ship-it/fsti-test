@@ -123,6 +123,34 @@ body {
   border-radius: 50px; font-size: 15px; cursor: pointer; transition: all 0.3s;
 }
 .share-btn:hover { transform: scale(1.05); }
+.poster-btn {
+  display: inline-block; padding: 13px 36px; margin: 18px 8px;
+  background: linear-gradient(135deg, #6366f1, #38bdf8); border: none; color: #fff;
+  border-radius: 50px; font-size: 15px; cursor: pointer; transition: all 0.3s;
+}
+.poster-btn:hover { transform: scale(1.05); }
+.qr-section {
+  margin: 25px auto; text-align: center; padding: 18px;
+  background: rgba(255,255,255,0.06); border: 1px dashed rgba(168,85,247,0.3);
+  border-radius: 16px; max-width: 280px;
+}
+.qr-section img { width: 140px; height: 140px; border-radius: 8px; margin-bottom: 8px; }
+.qr-section p { font-size: 12px; color: #888; line-height: 1.6; }
+.poster-overlay {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85); z-index: 9999;
+  justify-content: center; align-items: center; flex-direction: column;
+}
+.poster-overlay.show { display: flex; }
+.poster-overlay canvas { border-radius: 12px; max-width: 90vw; max-height: 75vh; }
+.poster-actions { margin-top: 16px; display: flex; gap: 12px; }
+.poster-actions button {
+  padding: 12px 30px; border-radius: 50px; font-size: 14px; cursor: pointer; transition: all 0.3s;
+}
+.poster-save { background: linear-gradient(135deg, #a855f7, #ff6bcd); border: none; color: #fff; }
+.poster-close { background: transparent; border: 2px solid #666; color: #aaa; }
+.poster-save:hover { transform: scale(1.05); }
+.poster-close:hover { border-color: #fff; color: #fff; }
 .footer-note { text-align: center; color: #444; font-size: 11px; margin: 28px 0; line-height: 1.8; }
 </style>
 </head>
@@ -157,6 +185,15 @@ body {
 <!-- 结果页 -->
 <div class="page" id="page-result">
   <div id="result-content"></div>
+</div>
+
+<!-- 海报弹窗 -->
+<div class="poster-overlay" id="poster-overlay">
+  <canvas id="poster-canvas"></canvas>
+  <div class="poster-actions">
+    <button class="poster-save" id="btn-poster-save">💾 长按/保存海报</button>
+    <button class="poster-close" id="btn-poster-close">✕ 关闭</button>
+  </div>
 </div>
 
 </div>
@@ -609,7 +646,12 @@ function showResult() {
         ${dh}
       </div>
       <button class="retry-btn" id="btn-retry">🔄 不服再测一次</button>
-      <button class="share-btn" id="btn-share">📤 分享给饭圈姐妹</button>
+      <button class="poster-btn" id="btn-poster">🖼️ 生成分享海报</button>
+      <button class="share-btn" id="btn-share">📤 截图分享</button>
+      <div class="qr-section">
+        <img src="${QR_SRC}" alt="扫码测试">
+        <p>扫码或长按识别<br>测测你是哪种追星怪物</p>
+      </div>
     </div>
     <div class="disclaimer" style="margin-top:20px;">
       ⚠️ <strong>温馨提示</strong>：本结果由饭圈玄学引擎v1.0生成。如果你觉得不准，说明你还没认清自己的追星本质。如果你觉得准，那恭喜你——<strong>你已经没救了，但饭圈欢迎你</strong>。
@@ -626,10 +668,186 @@ function showResult() {
   document.getElementById('btn-share').addEventListener('click', function(){
     alert('截图分享给你的饭圈姐妹/兄弟吧！看看他们是哪种追星怪物 🎤');
   });
+  // 生成海报按钮
+  document.getElementById('btn-poster').addEventListener('click', function(){ generatePoster(r, scores, dh); });
+}
+
+// ========== 二维码 base64 ==========
+const QR_SRC = "data:image/png;base64,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";
+
+// ========== Canvas 海报生成 ==========
+function generatePoster(r, scores, dimsHtml) {
+  const W = 750, H = 1334; // 手机海报尺寸
+  const canvas = document.getElementById('poster-canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // 背景渐变
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#0a0015');
+  bg.addColorStop(0.5, '#1a0a2e');
+  bg.addColorStop(1, '#0a0015');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // 星星装饰
+  for(let i=0; i<60; i++){
+    ctx.beginPath();
+    ctx.arc(Math.random()*W, Math.random()*H, Math.random()*1.5+0.5, 0, Math.PI*2);
+    ctx.fillStyle = `hsla(${260+Math.random()*60},80%,85%,${0.3+Math.random()*0.5})`;
+    ctx.fill();
+  }
+
+  // 顶部标题
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#888';
+  ctx.font = '24px -apple-system, PingFang SC, sans-serif';
+  ctx.fillText('FSTI · 追星灵魂人格测试', W/2, 60);
+
+  // 大 Emoji
+  ctx.font = '100px serif';
+  ctx.fillText(r.emoji, W/2, 180);
+
+  // 代号
+  ctx.font = 'bold 52px -apple-system, PingFang SC, sans-serif';
+  ctx.fillStyle = '#a855f7';
+  ctx.fillText(r.code, W/2, 250);
+
+  // 名称
+  ctx.font = 'bold 38px -apple-system, PingFang SC, sans-serif';
+  ctx.fillStyle = '#ff6bcd';
+  ctx.fillText(r.name, W/2, 300);
+
+  // 匹配度
+  ctx.font = '22px -apple-system, PingFang SC, sans-serif';
+  ctx.fillStyle = '#888';
+  ctx.fillText(`灵魂匹配度 ${r.matchPct}%`, W/2, 340);
+
+  // tagline
+  ctx.font = 'italic 26px -apple-system, PingFang SC, sans-serif';
+  ctx.fillStyle = '#fff';
+  wrapText(ctx, r.tagline.replace(/'/g, ''), W/2, 390, W-100, 34);
+
+  // 描述（去HTML标签）
+  const descClean = r.desc.replace(/<[^>]+>/g, '');
+  ctx.font = '22px -apple-system, PingFang SC, sans-serif';
+  ctx.fillStyle = '#bbb';
+  ctx.textAlign = 'left';
+  const descY = wrapText(ctx, descClean, 60, 460, W-120, 32);
+
+  // 维度条（取前6个最高的）
+  const dn = {
+    krypton:'氪金力', data:'数据力', face:'颜控度', mom:'妈粉值', gf:'恋爱脑',
+    toxic:'毒唯度', buddha:'佛系度', climb:'爬墙率', shill:'安利欲', antihate:'反黑力',
+    ctrl:'控评力', front:'前线力', drama:'戏精值', emo:'emo值', sane:'理智值', loyal:'忠诚度'
+  };
+  const dc = {
+    krypton:'#ffd93d', data:'#38bdf8', face:'#ff6bcd', mom:'#6bcb77', gf:'#ff6b6b',
+    toxic:'#9333ea', buddha:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
+    ctrl:'#3b82f6', front:'#a855f7', drama:'#ec4899', emo:'#60a5fa', sane:'#10b981', loyal:'#f59e0b'
+  };
+  const allDims = Object.keys(dn);
+  const dimVals = allDims.map(d => ({key:d, val: Math.min(99, Math.max(5, Math.round((scores[d]||0)/20*100+Math.random()*12)))}));
+  dimVals.sort((a,b) => b.val - a.val);
+  const top6 = dimVals.slice(0, 6);
+
+  let barY = Math.min(descY + 30, 850);
+  ctx.font = 'bold 22px -apple-system, PingFang SC, sans-serif';
+  ctx.fillStyle = '#a855f7';
+  ctx.textAlign = 'left';
+  ctx.fillText('🎤 核心维度', 60, barY);
+  barY += 15;
+
+  top6.forEach(d => {
+    barY += 36;
+    ctx.font = '20px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#888';
+    ctx.textAlign = 'left';
+    ctx.fillText(dn[d.key], 60, barY);
+    // bar background
+    ctx.fillStyle = '#1a1a2e';
+    roundRect(ctx, 170, barY-14, 420, 18, 9);
+    ctx.fill();
+    // bar fill
+    ctx.fillStyle = dc[d.key] || '#a855f7';
+    roundRect(ctx, 170, barY-14, 420*(d.val/100), 18, 9);
+    ctx.fill();
+    // value
+    ctx.fillStyle = '#a855f7';
+    ctx.textAlign = 'right';
+    ctx.fillText(d.val+'%', 640, barY);
+  });
+
+  // 二维码
+  const qrImg = new Image();
+  qrImg.onload = function() {
+    const qrSize = 130;
+    const qrX = W/2 - qrSize/2;
+    const qrY = H - 260;
+    // 白色圆角背景
+    ctx.fillStyle = '#fff';
+    roundRect(ctx, qrX-12, qrY-12, qrSize+24, qrSize+24, 12);
+    ctx.fill();
+    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+    ctx.textAlign = 'center';
+    ctx.font = '20px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('扫码测测你是哪种追星怪物', W/2, qrY + qrSize + 40);
+    ctx.font = '16px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#555';
+    ctx.fillText('FSTI · 追星灵魂人格指示器 · 仅供娱乐', W/2, H - 30);
+
+    // 显示弹窗
+    document.getElementById('poster-overlay').classList.add('show');
+  };
+  qrImg.src = QR_SRC;
+}
+
+// 文字换行工具
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  const align = ctx.textAlign;
+  let line = '';
+  for(let i=0; i<text.length; i++){
+    const test = line + text[i];
+    if(ctx.measureText(test).width > maxW && line){
+      ctx.fillText(line, x, y);
+      line = text[i]; y += lineH;
+    } else { line = test; }
+  }
+  if(line) { ctx.fillText(line, x, y); y += lineH; }
+  return y;
+}
+
+// 圆角矩形
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
 }
 
 // ========== 初始化 ==========
 document.getElementById('btn-start').addEventListener('click', startTest);
+
+// 海报弹窗控制
+document.getElementById('btn-poster-close').addEventListener('click', function(){
+  document.getElementById('poster-overlay').classList.remove('show');
+});
+document.getElementById('btn-poster-save').addEventListener('click', function(){
+  const canvas = document.getElementById('poster-canvas');
+  const link = document.createElement('a');
+  link.download = 'FSTI-我的追星人格.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
 </script>
 </body>
 </html>
