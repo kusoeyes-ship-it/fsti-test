@@ -783,81 +783,150 @@ function doDrawPoster(r, scores, avatarImg) {
   const P = '#a855f7';
 
   // 纯黑背景
-  ctx.fillStyle = '#08080f'; ctx.fillRect(0, 0, W, H);
-  const glow = ctx.createRadialGradient(W/2, H*0.32, 0, W/2, H*0.32, 420);
-  glow.addColorStop(0, 'rgba(120,50,200,0.07)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = '#050508'; ctx.fillRect(0, 0, W, H);
+  const glow = ctx.createRadialGradient(W/2, 300, 0, W/2, 300, 350);
+  glow.addColorStop(0, 'rgba(120,50,200,0.05)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
-  for(let i=0;i<20;i++){ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,Math.random()*1+0.3,0,Math.PI*2);ctx.fillStyle='rgba(168,85,247,'+(0.08+Math.random()*0.15)+')';ctx.fill();}
 
-  // === 顶部标题 ===
+  // === 顶部 ===
   ctx.textAlign='center';
-  ctx.font='22px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#666';
-  ctx.fillText('FSTI \u00b7 \u8ffd\u661f\u7075\u9b42\u4eba\u683c\u6d4b\u8bd5', W/2, 42);
+  ctx.font='600 11px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(168,85,247,0.5)';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('FSTI \u00b7 FANDOM SOUL TYPE INDICATOR', W/2, 36);
 
   // === 头像 ===
   if(avatarImg){
-    const aS=180, aY=65;
-    ctx.beginPath();ctx.arc(W/2,aY+aS/2,aS/2+4,0,Math.PI*2);ctx.strokeStyle='rgba(168,85,247,0.25)';ctx.lineWidth=2;ctx.stroke();
+    const aS=160, aY=56;
+    ctx.beginPath();ctx.arc(W/2,aY+aS/2,aS/2+3,0,Math.PI*2);ctx.strokeStyle='rgba(168,85,247,0.2)';ctx.lineWidth=1;ctx.stroke();
     ctx.save();ctx.beginPath();ctx.arc(W/2,aY+aS/2,aS/2,0,Math.PI*2);ctx.clip();ctx.drawImage(avatarImg,W/2-aS/2,aY,aS,aS);ctx.restore();
   }
 
-  let y = 290;
+  let y = 250;
 
-  // === 代号（大） ===
+  // === 人格信息 ===
   ctx.textAlign='center';
-  ctx.font='bold 56px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle=P;
-  ctx.fillText(r.code, W/2, y); y+=50;
+  ctx.font='600 12px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(168,85,247,0.5)';
+  ctx.fillText(r.code, W/2, y); y+=30;
 
-  // === 名称（大） ===
-  ctx.font='bold 40px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#fff';
-  ctx.fillText(r.name, W/2, y); y+=35;
+  ctx.font='800 38px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#fff';
+  ctx.fillText(r.name, W/2, y); y+=26;
 
-  // === 匹配度 ===
-  ctx.font='20px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#666';
-  ctx.fillText('\u5339\u914d\u5ea6 '+r.matchPct+'%', W/2, y); y+=30;
+  ctx.font='400 14px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.3)';
+  ctx.fillText('\u5339\u914d\u5ea6 '+r.matchPct+'%', W/2, y); y+=24;
 
-  // === 分隔线 ===
-  ctx.strokeStyle='rgba(168,85,247,0.2)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(80,y); ctx.lineTo(W-80,y); ctx.stroke(); y+=28;
+  // 分隔线
+  ctx.strokeStyle='rgba(168,85,247,0.15)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(100,y); ctx.lineTo(W-100,y); ctx.stroke(); y+=22;
 
-  // === tagline（大） ===
-  ctx.font='bold 26px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.85)';
-  y=wrapText(ctx, r.tagline.replace(/'/g,''), W/2, y, W-100, 34); y+=20;
+  // tagline
+  ctx.font='400 20px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.75)';
+  y=wrapText(ctx, r.tagline.replace(/'/g,''), W/2, y, W-120, 28); y+=16;
 
-  // === 描述（中等大小，填满中部） ===
-  ctx.font='22px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#aaa'; ctx.textAlign='left';
-  y=wrapText(ctx, r.desc.replace(/<[^>]+>/g,''), 50, y, W-100, 32); y+=30;
+  // 描述（紧凑）
+  ctx.font='400 16px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.textAlign='left';
+  y=wrapText(ctx, r.desc.replace(/<[^>]+>/g,''), 50, y, W-100, 24); y+=28;
 
-  // === 维度条（加大） ===
-  const dn={krypton:'\u5e94\u63f4\u529b',data:'\u6570\u636e\u529b',face:'\u989c\u63a7\u5ea6',mom:'\u5988\u7c89\u503c',gf:'\u5fc3\u52a8\u503c',toxic:'\u4e13\u4e00\u5ea6',chill:'\u6de1\u5b9a\u5ea6',climb:'\u722c\u5899\u7387',shill:'\u5b89\u5229\u6b32',antihate:'\u53cd\u9ed1\u529b',ctrl:'\u7ec4\u7ec7\u529b',front:'\u524d\u7ebf\u529b',drama:'\u620f\u7cbe\u503c',emo:'emo\u503c',sane:'\u7406\u667a\u503c',loyal:'\u5fe0\u8bda\u5ea6'};
-  const dv=Object.keys(dn).map(d=>({k:d,v:Math.min(99,Math.max(5,Math.round((scores[d]||0)/20*100+Math.random()*12)))})).sort((a,b)=>b.v-a.v).slice(0,5);
-  dv.forEach(d=>{
-    y+=34;
-    ctx.font='18px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#888'; ctx.textAlign='left';
-    ctx.fillText(dn[d.k], 50, y);
-    ctx.fillStyle='rgba(168,85,247,0.1)'; roundRect(ctx,150,y-12,420,18,9); ctx.fill();
-    ctx.fillStyle='rgba(168,85,247,'+(0.35+d.v/100*0.55)+')'; roundRect(ctx,150,y-12,420*(d.v/100),18,9); ctx.fill();
-    ctx.fillStyle=P; ctx.textAlign='right'; ctx.font='bold 17px -apple-system,PingFang SC,sans-serif';
-    ctx.fillText(d.v+'%', 620, y);
+  // === 六维雷达图 + 粉丝画像标签 ===
+  const dn={krypton:'\u5e94\u63f4',data:'\u6570\u636e',face:'\u989c\u63a7',mom:'\u5173\u7231',gf:'\u5fc3\u52a8',toxic:'\u4e13\u4e00',chill:'\u6de1\u5b9a',climb:'\u63a2\u7d22',shill:'\u5b89\u5229',antihate:'\u5b88\u62a4',ctrl:'\u7ec4\u7ec7',front:'\u524d\u7ebf',drama:'\u8868\u8fbe',emo:'\u60c5\u611f',sane:'\u7406\u667a',loyal:'\u5fe0\u8bda'};
+  const allDims=Object.keys(dn);
+  const dimVals=allDims.map(d=>({k:d,v:Math.min(99,Math.max(5,Math.round((scores[d]||0)/20*100+Math.random()*12)))})).sort((a,b)=>b.v-a.v);
+  const top6=dimVals.slice(0,6);
+
+  // 雷达图参数
+  const cx=W/2, cy=y+120, radius=90;
+  const sides=6;
+  const angleStep=Math.PI*2/sides;
+  const startAngle=-Math.PI/2;
+
+  // 画雷达网格（3层）
+  for(let layer=1;layer<=3;layer++){
+    const lr=radius*layer/3;
+    ctx.beginPath();
+    for(let i=0;i<sides;i++){
+      const a=startAngle+i*angleStep;
+      const px=cx+Math.cos(a)*lr, py=cy+Math.sin(a)*lr;
+      if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+    ctx.strokeStyle='rgba(168,85,247,'+(0.06+layer*0.03)+')'; ctx.lineWidth=1; ctx.stroke();
+  }
+
+  // 画轴线
+  for(let i=0;i<sides;i++){
+    const a=startAngle+i*angleStep;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a)*radius, cy+Math.sin(a)*radius);
+    ctx.strokeStyle='rgba(168,85,247,0.08)'; ctx.lineWidth=1; ctx.stroke();
+  }
+
+  // 画数据区域
+  ctx.beginPath();
+  for(let i=0;i<sides;i++){
+    const a=startAngle+i*angleStep;
+    const r2=radius*top6[i].v/100;
+    const px=cx+Math.cos(a)*r2, py=cy+Math.sin(a)*r2;
+    if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(168,85,247,0.15)'; ctx.fill();
+  ctx.strokeStyle='rgba(168,85,247,0.6)'; ctx.lineWidth=2; ctx.stroke();
+
+  // 画顶点圆点
+  for(let i=0;i<sides;i++){
+    const a=startAngle+i*angleStep;
+    const r2=radius*top6[i].v/100;
+    ctx.beginPath();
+    ctx.arc(cx+Math.cos(a)*r2, cy+Math.sin(a)*r2, 3, 0, Math.PI*2);
+    ctx.fillStyle=P; ctx.fill();
+  }
+
+  // 维度标签（雷达外侧）
+  ctx.font='400 13px Inter,-apple-system,PingFang SC,sans-serif';
+  for(let i=0;i<sides;i++){
+    const a=startAngle+i*angleStep;
+    const lx=cx+Math.cos(a)*(radius+28), ly=cy+Math.sin(a)*(radius+28);
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(255,255,255,0.5)';
+    ctx.fillText(dn[top6[i].k], lx, ly);
+  }
+
+  // === 粉丝画像标签（雷达图下方） ===
+  const tagY = cy + radius + 56;
+  const tags = top6.slice(0,4).map(d=>dn[d.k]+'\u578b');
+  // 居中排列标签
+  ctx.font='500 13px Inter,-apple-system,PingFang SC,sans-serif';
+  const tagW=80, tagH=30, tagGap=10;
+  const totalTagW=tags.length*tagW+(tags.length-1)*tagGap;
+  let tagX=(W-totalTagW)/2;
+  tags.forEach(t=>{
+    // 标签背景
+    roundRect(ctx, tagX, tagY, tagW, tagH, 0);
+    ctx.fillStyle='rgba(168,85,247,0.1)'; ctx.fill();
+    ctx.strokeStyle='rgba(168,85,247,0.25)'; ctx.lineWidth=1; ctx.stroke();
+    // 标签文字
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(168,85,247,0.8)';
+    ctx.fillText(t, tagX+tagW/2, tagY+tagH/2);
+    tagX+=tagW+tagGap;
   });
 
-  // === 底部：左文案+右二维码（放大） ===
+  // === 底部：左文案+右二维码 ===
   const qrImg=new Image(),logoImg=new Image(); let ld=0;
   function done(){ld++;if(ld<2)return;
-    const by=H-180;
-    ctx.strokeStyle='rgba(168,85,247,0.15)'; ctx.lineWidth=1;
+    const by=H-165;
+    ctx.strokeStyle='rgba(168,85,247,0.1)'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(50,by); ctx.lineTo(W-50,by); ctx.stroke();
-    const qS=100, qX=W-50-qS, qY=by+15;
-    ctx.fillStyle='#fff'; roundRect(ctx,qX-6,qY-6,qS+12,qS+12,6); ctx.fill();
+    const qS=95, qX=W-50-qS, qY=by+12;
+    ctx.fillStyle='#fff'; roundRect(ctx,qX-5,qY-5,qS+10,qS+10,0); ctx.fill();
     ctx.drawImage(qrImg,qX,qY,qS,qS);
-    ctx.textAlign='left';
-    ctx.font='bold 22px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#fff';
-    ctx.fillText('\u6d4b\u6d4b\u4f60\u7684\u8ffd\u661f\u4eba\u683c', 50, qY+28);
-    ctx.font='16px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#666';
-    ctx.fillText('\u626b\u7801\u6216\u957f\u6309\u8bc6\u522b\u5f00\u59cb', 50, qY+55);
-    const lH=22, lW=lH*(logoImg.naturalWidth/logoImg.naturalHeight);
-    ctx.drawImage(logoImg, 50, qY+72, lW, lH);
-    ctx.textAlign='center'; ctx.font='12px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.15)';
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+    ctx.font='600 20px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#fff';
+    ctx.fillText('\u8ffd\u661f\u4eba\u683c\u9274\u5b9a', 50, qY+26);
+    ctx.font='400 13px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.35)';
+    ctx.fillText('\u626b\u7801\u6216\u957f\u6309\u8bc6\u522b\u5f00\u59cb\u6d4b\u8bd5', 50, qY+48);
+    const lH=20, lW=lH*(logoImg.naturalWidth/logoImg.naturalHeight);
+    ctx.drawImage(logoImg, 50, qY+62, lW, lH);
+    ctx.textAlign='center'; ctx.font='400 11px Inter,-apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.12)';
     ctx.fillText('FSTI \u00b7 \u4ec5\u4f9b\u5a31\u4e50', W/2, H-10);
     document.getElementById('poster-overlay').classList.add('show');
   }
