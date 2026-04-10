@@ -684,106 +684,124 @@ const LOGO_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABxIAAALtCAMAAAA7
 
 // ========== Canvas 海报生成 ==========
 function generatePoster(r, scores, dimsHtml) {
-  const W = 750, H = 1334; // 手机海报尺寸
+  const W = 750;
   const canvas = document.getElementById('poster-canvas');
-  canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // 背景渐变
-  const bg = ctx.createLinearGradient(0, 0, W, H);
-  bg.addColorStop(0, '#0a0015');
-  bg.addColorStop(0.5, '#1a0a2e');
-  bg.addColorStop(1, '#0a0015');
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
+  // 先用临时画布计算内容高度
+  canvas.width = W; canvas.height = 2000;
 
-  // 星星装饰
-  for(let i=0; i<60; i++){
-    ctx.beginPath();
-    ctx.arc(Math.random()*W, Math.random()*H, Math.random()*1.5+0.5, 0, Math.PI*2);
-    ctx.fillStyle = `hsla(${260+Math.random()*60},80%,85%,${0.3+Math.random()*0.5})`;
-    ctx.fill();
-  }
+  function drawContent() {
+    // 背景渐变
+    const bg = ctx.createLinearGradient(0, 0, W, canvas.height);
+    bg.addColorStop(0, '#0a0015');
+    bg.addColorStop(0.5, '#1a0a2e');
+    bg.addColorStop(1, '#0a0015');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, canvas.height);
 
-  // 顶部标题
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#888';
-  ctx.font = '24px -apple-system, PingFang SC, sans-serif';
-  ctx.fillText('FSTI · 追星灵魂人格测试', W/2, 60);
+    // 星星装饰
+    for(let i=0; i<60; i++){
+      ctx.beginPath();
+      ctx.arc(Math.random()*W, Math.random()*canvas.height, Math.random()*1.5+0.5, 0, Math.PI*2);
+      ctx.fillStyle = `hsla(${260+Math.random()*60},80%,85%,${0.3+Math.random()*0.5})`;
+      ctx.fill();
+    }
 
-  // 大 Emoji
-  ctx.font = '100px serif';
-  ctx.fillText(r.emoji, W/2, 180);
+    let y = 60;
+    // 顶部标题
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#888';
+    ctx.font = '24px -apple-system, PingFang SC, sans-serif';
+    ctx.fillText('FSTI \u00b7 追星灵魂人格测试', W/2, y);
+    y += 120;
 
-  // 代号
-  ctx.font = 'bold 52px -apple-system, PingFang SC, sans-serif';
-  ctx.fillStyle = '#a855f7';
-  ctx.fillText(r.code, W/2, 250);
+    // 大 Emoji
+    ctx.font = '100px serif';
+    ctx.fillText(r.emoji, W/2, y);
+    y += 70;
 
-  // 名称
-  ctx.font = 'bold 38px -apple-system, PingFang SC, sans-serif';
-  ctx.fillStyle = '#ff6bcd';
-  ctx.fillText(r.name, W/2, 300);
+    // 代号
+    ctx.font = 'bold 48px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#a855f7';
+    ctx.fillText(r.code, W/2, y);
+    y += 45;
 
-  // 匹配度
-  ctx.font = '22px -apple-system, PingFang SC, sans-serif';
-  ctx.fillStyle = '#888';
-  ctx.fillText(`灵魂匹配度 ${r.matchPct}%`, W/2, 340);
+    // 名称
+    ctx.font = 'bold 36px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#ff6bcd';
+    ctx.fillText(r.name, W/2, y);
+    y += 35;
 
-  // tagline
-  ctx.font = 'italic 26px -apple-system, PingFang SC, sans-serif';
-  ctx.fillStyle = '#fff';
-  wrapText(ctx, r.tagline.replace(/'/g, ''), W/2, 390, W-100, 34);
-
-  // 描述（去HTML标签）
-  const descClean = r.desc.replace(/<[^>]+>/g, '');
-  ctx.font = '22px -apple-system, PingFang SC, sans-serif';
-  ctx.fillStyle = '#bbb';
-  ctx.textAlign = 'left';
-  const descY = wrapText(ctx, descClean, 60, 460, W-120, 32);
-
-  // 维度条（取前6个最高的）
-  const dn = {
-    krypton:'氪金力', data:'数据力', face:'颜控度', mom:'妈粉值', gf:'恋爱脑',
-    toxic:'毒唯度', buddha:'佛系度', climb:'爬墙率', shill:'安利欲', antihate:'反黑力',
-    ctrl:'控评力', front:'前线力', drama:'戏精值', emo:'emo值', sane:'理智值', loyal:'忠诚度'
-  };
-  const dc = {
-    krypton:'#ffd93d', data:'#38bdf8', face:'#ff6bcd', mom:'#6bcb77', gf:'#ff6b6b',
-    toxic:'#9333ea', buddha:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
-    ctrl:'#3b82f6', front:'#a855f7', drama:'#ec4899', emo:'#60a5fa', sane:'#10b981', loyal:'#f59e0b'
-  };
-  const allDims = Object.keys(dn);
-  const dimVals = allDims.map(d => ({key:d, val: Math.min(99, Math.max(5, Math.round((scores[d]||0)/20*100+Math.random()*12)))}));
-  dimVals.sort((a,b) => b.val - a.val);
-  const top6 = dimVals.slice(0, 6);
-
-  let barY = Math.min(descY + 30, 850);
-  ctx.font = 'bold 22px -apple-system, PingFang SC, sans-serif';
-  ctx.fillStyle = '#a855f7';
-  ctx.textAlign = 'left';
-  ctx.fillText('🎤 核心维度', 60, barY);
-  barY += 15;
-
-  top6.forEach(d => {
-    barY += 36;
+    // 匹配度
     ctx.font = '20px -apple-system, PingFang SC, sans-serif';
     ctx.fillStyle = '#888';
+    ctx.fillText('\u7075\u9b42\u5339\u914d\u5ea6 ' + r.matchPct + '%', W/2, y);
+    y += 45;
+
+    // tagline
+    ctx.font = 'italic 24px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#fff';
+    y = wrapText(ctx, r.tagline.replace(/'/g, ''), W/2, y, W-100, 32);
+    y += 25;
+
+    // 描述
+    const descClean = r.desc.replace(/<[^>]+>/g, '');
+    ctx.font = '20px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#bbb';
     ctx.textAlign = 'left';
-    ctx.fillText(dn[d.key], 60, barY);
-    // bar background
-    ctx.fillStyle = '#1a1a2e';
-    roundRect(ctx, 170, barY-14, 420, 18, 9);
-    ctx.fill();
-    // bar fill
-    ctx.fillStyle = dc[d.key] || '#a855f7';
-    roundRect(ctx, 170, barY-14, 420*(d.val/100), 18, 9);
-    ctx.fill();
-    // value
+    y = wrapText(ctx, descClean, 60, y, W-120, 30);
+    y += 35;
+
+    // 维度条标题
+    ctx.font = 'bold 20px -apple-system, PingFang SC, sans-serif';
     ctx.fillStyle = '#a855f7';
-    ctx.textAlign = 'right';
-    ctx.fillText(d.val+'%', 640, barY);
-  });
+    ctx.textAlign = 'left';
+    ctx.fillText('\ud83c\udfa4 核心维度', 60, y);
+    y += 15;
+
+    // 维度条
+    const dn = {
+      krypton:'\u6c2a\u91d1\u529b', data:'\u6570\u636e\u529b', face:'\u989c\u63a7\u5ea6', mom:'\u5988\u7c89\u503c', gf:'\u604b\u7231\u8111',
+      toxic:'\u6bd2\u552f\u5ea6', buddha:'\u4f5b\u7cfb\u5ea6', climb:'\u722c\u5899\u7387', shill:'\u5b89\u5229\u6b32', antihate:'\u53cd\u9ed1\u529b',
+      ctrl:'\u63a7\u8bc4\u529b', front:'\u524d\u7ebf\u529b', drama:'\u620f\u7cbe\u503c', emo:'emo\u503c', sane:'\u7406\u667a\u503c', loyal:'\u5fe0\u8bda\u5ea6'
+    };
+    const dc = {
+      krypton:'#ffd93d', data:'#38bdf8', face:'#ff6bcd', mom:'#6bcb77', gf:'#ff6b6b',
+      toxic:'#9333ea', buddha:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
+      ctrl:'#3b82f6', front:'#a855f7', drama:'#ec4899', emo:'#60a5fa', sane:'#10b981', loyal:'#f59e0b'
+    };
+    const allDims = Object.keys(dn);
+    const dimVals = allDims.map(d => ({key:d, val: Math.min(99, Math.max(5, Math.round((scores[d]||0)/20*100+Math.random()*12)))}));
+    dimVals.sort((a,b) => b.val - a.val);
+    const top6 = dimVals.slice(0, 6);
+
+    top6.forEach(d => {
+      y += 34;
+      ctx.font = '18px -apple-system, PingFang SC, sans-serif';
+      ctx.fillStyle = '#888'; ctx.textAlign = 'left';
+      ctx.fillText(dn[d.key], 60, y);
+      ctx.fillStyle = '#1a1a2e';
+      roundRect(ctx, 165, y-13, 400, 16, 8); ctx.fill();
+      ctx.fillStyle = dc[d.key] || '#a855f7';
+      roundRect(ctx, 165, y-13, 400*(d.val/100), 16, 8); ctx.fill();
+      ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
+      ctx.fillText(d.val+'%', 620, y);
+    });
+
+    y += 45; // 维度条后间距
+    return y; // 返回底部内容起始Y
+  }
+
+  const contentEndY = drawContent();
+
+  // 计算底部区域需要的高度：logo(30) + gap(20) + text(16) + gap(15) + qr背景(130) + gap(30) + text(18) + gap(25) + text(14) + padding(25) ≈ 325
+  const bottomNeeded = 310;
+  const totalH = Math.max(1334, contentEndY + bottomNeeded);
+
+  // 重设画布到精确高度并重绘
+  canvas.height = totalH;
+  const contentY2 = drawContent();
 
   // 底部：logo + 二维码
   const qrImg = new Image();
@@ -792,32 +810,34 @@ function generatePoster(r, scores, dimsHtml) {
   function onBothLoaded() {
     loaded++;
     if (loaded < 2) return;
-    const qrSize = 110;
-    const logoH = 30;
+    const qrSize = 100;
+    const logoH = 28;
     const logoW = logoH * (logoImg.naturalWidth / logoImg.naturalHeight);
-    const bottomY = H - 230;
+    let by = contentY2;
 
-    // QQ音乐logo居中偏上
-    ctx.drawImage(logoImg, W/2 - logoW/2, bottomY, logoW, logoH);
+    // QQ音乐logo
+    ctx.drawImage(logoImg, W/2 - logoW/2, by, logoW, logoH);
+    by += logoH + 18;
     ctx.textAlign = 'center';
-    ctx.font = '16px -apple-system, PingFang SC, sans-serif';
+    ctx.font = '15px -apple-system, PingFang SC, sans-serif';
     ctx.fillStyle = '#888';
-    ctx.fillText('QQ音乐 出品', W/2, bottomY + logoH + 20);
+    ctx.fillText('QQ\u97f3\u4e50 \u51fa\u54c1', W/2, by);
+    by += 22;
 
     // 二维码
     const qrX = W/2 - qrSize/2;
-    const qrY = bottomY + logoH + 40;
     ctx.fillStyle = '#fff';
-    roundRect(ctx, qrX-10, qrY-10, qrSize+20, qrSize+20, 10);
-    ctx.fill();
-    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+    roundRect(ctx, qrX-8, by-8, qrSize+16, qrSize+16, 8); ctx.fill();
+    ctx.drawImage(qrImg, qrX, by, qrSize, qrSize);
+    by += qrSize + 28;
 
-    ctx.font = '18px -apple-system, PingFang SC, sans-serif';
+    ctx.font = '17px -apple-system, PingFang SC, sans-serif';
     ctx.fillStyle = '#aaa';
-    ctx.fillText('扫码测测你是哪种追星怪物', W/2, qrY + qrSize + 30);
-    ctx.font = '14px -apple-system, PingFang SC, sans-serif';
+    ctx.fillText('\u626b\u7801\u6d4b\u6d4b\u4f60\u662f\u54ea\u79cd\u8ffd\u661f\u602a\u7269', W/2, by);
+    by += 28;
+    ctx.font = '13px -apple-system, PingFang SC, sans-serif';
     ctx.fillStyle = '#555';
-    ctx.fillText('FSTI · 追星灵魂人格指示器 · 仅供娱乐', W/2, H - 20);
+    ctx.fillText('FSTI \u00b7 \u8ffd\u661f\u7075\u9b42\u4eba\u683c\u6307\u793a\u5668 \u00b7 \u4ec5\u4f9b\u5a31\u4e50', W/2, by);
 
     document.getElementById('poster-overlay').classList.add('show');
   }
