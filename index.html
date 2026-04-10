@@ -171,7 +171,7 @@ body {
     <div class="real-slogan">别骗自己了。<br>你追的不是星，是你灵魂深处的执念。</div>
   </div>
   <div class="disclaimer">
-    ⚠️ <strong>严正声明</strong>：本测试可能精准到让你怀疑手机被监控。测试结果不可用于粉丝战争弹药、超话举报证据、或脱粉回踩的理由。如测后情绪崩溃，请立即打开爱豆最新物料进行自我疗愈。<br>
+    ⚠️ <strong>严正声明</strong>：本测试可能精准到让你怀疑手机被监控。测试结果仅供娱乐参考，倡导理性追星、快乐追星。如测后情绪崩溃，请立即打开爱豆最新物料进行自我疗愈。<br>
     🔮 本测试采用<strong>饭圈大数据玄学引擎</strong>，融合了你的选择倾向、微博超话活跃指数（虚构）、以及你钱包的哭泣频率，综合运算得出结果。
   </div>
   <button class="start-btn" id="btn-start">🎤 测测我是哪种追星怪物</button>
@@ -216,7 +216,7 @@ body {
 })();
 
 // ========== 15个追星人格维度 ==========
-// data: 氪金力, 数据力, 颜控度, 妈粉值, 女友粉, 毒唯度, 佛系度, 爬墙率, 安利欲, 反黑力, 控评力, 前线力, cp脑, 塌房承受, 理智值
+// data: 应援力, 数据力, 颜控度, 妈粉值, 女友粉, 专一度, 淡定度, 爬墙率, 安利欲, 反黑力, 组织力, 前线力, cp脑, 塌房承受, 理智值
 
 // ========== 20道追星灵魂拷问 ==========
 const questions = [
@@ -225,17 +225,17 @@ const questions = [
     opts: [
       { text: "手机一摔，微博一关，朋友圈一发：'散了吧家人们，房子塌了。'", scores: {gf:3, drama:2, loyal:1} },
       { text: "冷静分析对方的家世背景学历长相，看配不配得上我家哥哥/姐姐。", scores: {mom:3, ctrl:2, sane:1} },
-      { text: "无所谓，只要他/她开心就好……（嘴上说着，眼泪已经流到下巴）", scores: {buddha:2, emo:3, mom:1} },
-      { text: "秒切下一个墙头。'天涯何处无芳草，何必单恋一枝花？'", scores: {climb:3, buddha:2, face:1} }
+      { text: "无所谓，只要他/她开心就好……（嘴上说着，眼泪已经流到下巴）", scores: {chill:2, emo:3, mom:1} },
+      { text: "秒切下一个墙头。'天涯何处无芳草，何必单恋一枝花？'", scores: {climb:3, chill:2, face:1} }
     ]
   },
   {
-    q: "你发现你爱豆的代拍图被P得亲妈都不认识了，而且全网疯传。你会？",
+    q: "你发现网上流传的爱豆路人照被P得完全失真了。你会？",
     opts: [
       { text: "立刻冲进评论区逐条反驳：'原图在这！！！麻烦看清楚再说话好吗！！！'", scores: {antihate:3, ctrl:2, loyal:1} },
-      { text: "默默保存了原图和P图——等等，P图好像也挺好看的？算了都存了。", scores: {face:3, buddha:2, climb:1} },
-      { text: "气到发抖，连夜写了一篇3000字的长文控诉代拍行业乱象。", scores: {drama:3, antihate:2, data:1} },
-      { text: "转发到粉丝群：'姐妹们上号！！！一人十条给我冲！！！'", scores: {ctrl:3, data:2, antihate:1} }
+      { text: "默默保存了原图和P图——等等，P图好像也挺好看的？算了都存了。", scores: {face:3, chill:2, climb:1} },
+      { text: "气到发抖，连夜写了一篇3000字的长文呼吁大家尊重真实形象。", scores: {drama:3, antihate:2, data:1} },
+      { text: "转发到粉丝群：'大家来看看原图，帮忙澄清一下吧！'", scores: {ctrl:3, data:2, antihate:1} }
     ]
   },
   {
@@ -243,7 +243,7 @@ const questions = [
     opts: [
       { text: "什么睡觉？我的微博提醒24小时开着，闹钟都没这个灵。", scores: {data:3, loyal:2, front:1} },
       { text: "第二天醒来发现自己是第48573个点赞的，瞬间心态崩了。", scores: {data:2, emo:2, ctrl:1} },
-      { text: "睡醒看到了，点个赞，继续刷牙。", scores: {buddha:3, sane:2, climb:1} },
+      { text: "睡醒看到了，点个赞，继续刷牙。", scores: {chill:3, sane:2, climb:1} },
       { text: "秒醒！不仅点赞转发评论三连，还截图发群里喊姐妹们起来接驾。", scores: {ctrl:3, data:2, loyal:1} }
     ]
   },
@@ -251,9 +251,9 @@ const questions = [
     q: "这个月的工资到账了。你打开购物车，发现爱豆代言的新品上架了。",
     opts: [
       { text: "买！买十件！自己用一件，剩下九件安利给全公司。", scores: {krypton:3, shill:2, loyal:1} },
-      { text: "先算一下这个月房租水电吃饭要多少……算了不算了，先买再说。", scores: {krypton:3, emo:1, sane:1} },
-      { text: "看看就好，我追星但我不花钱——好吧我撒谎了，加购了。", scores: {buddha:2, krypton:2, sane:1} },
-      { text: "不买。但我会去各大平台刷好评冲销量，精神氪金也是氪金。", scores: {data:3, ctrl:2, krypton:1} }
+      { text: "先算一下这个月预算还剩多少……嗯，买一件意思一下吧。", scores: {krypton:3, emo:1, sane:1} },
+      { text: "看看就好，我追星但我不花钱——好吧我撒谎了，加购了。", scores: {chill:2, krypton:2, sane:1} },
+      { text: "不买。但我会默默收藏关注，在心里为爱豆加油就好。", scores: {data:3, ctrl:2, krypton:1} }
     ]
   },
   {
@@ -270,15 +270,15 @@ const questions = [
     opts: [
       { text: "当场拉黑，此人已从我的人生中物理删除。", scores: {toxic:3, loyal:2, antihate:1} },
       { text: "掏出手机翻了四十分钟的高清生图，直到对方被迫说'确实好看'。", scores: {shill:3, face:2, ctrl:1} },
-      { text: "微笑：'每个人审美不同嘛~'（回家后对着爱豆照片哭了两小时）", scores: {emo:3, buddha:2, gf:1} },
-      { text: "无所谓，反正我追的是才华，不是脸。……好吧脸也追。", scores: {sane:2, face:2, buddha:1} }
+      { text: "微笑：'每个人审美不同嘛~'（回家后对着爱豆照片哭了两小时）", scores: {emo:3, chill:2, gf:1} },
+      { text: "无所谓，反正我追的是才华，不是脸。……好吧脸也追。", scores: {sane:2, face:2, chill:1} }
     ]
   },
   {
     q: "爱豆生日，你准备了一个月，终于轮到你送生日礼物了。你送什么？",
     opts: [
       { text: "手写了一封12页的信+手工相册+编了一首歌——我就是爱豆的妈妈。", scores: {mom:3, loyal:2, emo:1} },
-      { text: "直接包了个五位数的现金红包——爱他/她就给他/她最实际的。", scores: {krypton:3, sane:1, mom:1} },
+      { text: "花了两周亲手做了一个手工相框——心意比金额重要。", scores: {krypton:3, sane:1, mom:1} },
       { text: "联合全球粉丝包了一块LED大屏+地铁广告+时代广场投屏。", scores: {data:3, krypton:2, ctrl:1} },
       { text: "在超话发了一篇催泪小作文，阅读量比礼物重要。", scores: {drama:3, data:2, shill:1} }
     ]
@@ -286,37 +286,37 @@ const questions = [
   {
     q: "你爱豆的对家（竞争对手）发了新歌，而且确实……还不错。",
     opts: [
-      { text: "好听也不能说好听！关闭页面，立刻去给自家哥哥/姐姐的歌刷播放量！", scores: {toxic:3, data:2, loyal:1} },
+      { text: "好听也不能说好听！关闭页面，立刻去把自家哥哥/姐姐的歌多听几遍！", scores: {toxic:3, data:2, loyal:1} },
       { text: "偷偷听了三遍，加到了一个叫'不能让姐妹们知道'的歌单里。", scores: {climb:3, face:2, sane:1} },
       { text: "客观评价：'确实不错，但我家的更好。'——然后被两边粉丝同时骂了。", scores: {sane:3, drama:1, antihate:1} },
-      { text: "内心挣扎了一下，然后默默打开自家的歌循环播放，用数据说话。", scores: {antihate:3, ctrl:2, toxic:1} }
+      { text: "内心挣扎了一下，然后默默打开自家的歌循环播放，好歌自己会说话。", scores: {antihate:3, ctrl:2, toxic:1} }
     ]
   },
   {
     q: "你的爱豆在综艺上被剪辑成了'不合群''耍大牌'的样子。",
     opts: [
       { text: "通宵剪了一个澄清视频，配上完整未删减片段，发遍全网。", scores: {antihate:3, data:2, loyal:1} },
-      { text: "冲到节目组官博底下控评，键盘都快被我敲冒烟了。", scores: {ctrl:3, antihate:2, drama:1} },
+      { text: "跑到节目组官博下留言表达不满，语气坚定但保持礼貌。", scores: {ctrl:3, antihate:2, drama:1} },
       { text: "心疼到嚎啕大哭，发了一条只有自己能看到的朋友圈。", scores: {emo:3, gf:2, mom:1} },
-      { text: "算了，综艺剪辑都这样，翻篇吧。（打开爱豆的饭拍看了一百遍治愈自己）", scores: {buddha:3, sane:2, face:1} }
+      { text: "算了，综艺剪辑都这样，翻篇吧。（打开爱豆的饭拍看了一百遍治愈自己）", scores: {chill:3, sane:2, face:1} }
     ]
   },
   {
     q: "粉丝群里突然有人说'我觉得XX（另一个爱豆）比咱家的好看'。",
     opts: [
-      { text: "'踢了踢了！混进来的间谍是吧？管理员呢？！'", scores: {toxic:3, ctrl:2, antihate:1} },
-      { text: "沉默。但默默打开了那个人的主页，截图存证以备后用。", scores: {ctrl:3, drama:2, sane:1} },
+      { text: "'哎呀，萝卜白菜各有所爱嘛，不过这里还是聊咱家的吧~'", scores: {toxic:3, ctrl:2, antihate:1} },
+      { text: "沉默。心想：审美这件事，真的没法强求。", scores: {ctrl:3, drama:2, sane:1} },
       { text: "发了一张爱豆的绝美生图，配文：'你再说一遍？'", scores: {face:3, shill:2, loyal:1} },
-      { text: "'哈哈确实也挺好看的~不过我还是最喜欢咱家的！'", scores: {buddha:2, sane:2, climb:1} }
+      { text: "'哈哈确实也挺好看的~不过我还是最喜欢咱家的！'", scores: {chill:2, sane:2, climb:1} }
     ]
   },
   {
     q: "你的手机相册里有多少张爱豆的照片？",
     opts: [
-      { text: "不到一百张。我比较克制，只存精选中的精选。", scores: {sane:3, buddha:2, face:1} },
+      { text: "不到一百张。我比较克制，只存精选中的精选。", scores: {sane:3, chill:2, face:1} },
       { text: "一千多张。按年份/活动/妆造/表情分了28个文件夹。", scores: {data:3, front:2, face:1} },
       { text: "我不数了。上次清内存发现爱豆照片占了47G。", scores: {face:3, loyal:2, krypton:1} },
-      { text: "全是截图、饭拍、代拍、路透——我不拍照，我只搬运。", scores: {front:3, data:2, ctrl:1} }
+      { text: "全是截图、官方物料、演出照——我不拍照，我只收藏。", scores: {front:3, data:2, ctrl:1} }
     ]
   },
   {
@@ -325,16 +325,16 @@ const questions = [
       { text: "'因为他/她的舞台表现力和作品质量是业内顶级的。'（准备了一份PPT）", scores: {shill:3, data:2, sane:1} },
       { text: "'因为长得好看啊！！！你看这张！！！还有这张！！！'", scores: {face:3, shill:2, gf:1} },
       { text: "'因为他/她让我觉得自己也可以变得更好。'（说着说着眼眶红了）", scores: {emo:3, mom:2, loyal:1} },
-      { text: "'说不清楚，反正就是喜欢，不接受反驳。'", scores: {loyal:3, toxic:1, buddha:1} }
+      { text: "'说不清楚，反正就是喜欢，不接受反驳。'", scores: {loyal:3, toxic:1, chill:1} }
     ]
   },
   {
     q: "你爱豆所在的团体/公司突然宣布解散/合约到期。",
     opts: [
-      { text: "天塌了。什么工作什么学习，我需要请三天假来处理情绪。", scores: {emo:3, gf:2, loyal:1} },
-      { text: "马上转战爱豆的个人社交账号，继续做数据，阵地不能丢！", scores: {data:3, ctrl:2, loyal:1} },
-      { text: "虽然难过，但尊重他/她的选择。以后不管做什么我都支持。", scores: {mom:3, sane:2, buddha:1} },
-      { text: "早就预感到了。我的下一个墙头已经在排队了。", scores: {climb:3, sane:1, buddha:1} }
+      { text: "好难过。需要缓一缓，晚上回家好好消化一下这个消息。", scores: {emo:3, gf:2, loyal:1} },
+      { text: "马上关注爱豆的个人社交账号，继续默默支持，陪伴不变！", scores: {data:3, ctrl:2, loyal:1} },
+      { text: "虽然难过，但尊重他/她的选择。以后不管做什么我都支持。", scores: {mom:3, sane:2, chill:1} },
+      { text: "早就预感到了。我的下一个墙头已经在排队了。", scores: {climb:3, sane:1, chill:1} }
     ]
   },
   {
@@ -342,8 +342,8 @@ const questions = [
     opts: [
       { text: "太好了！！！终于有人能跟我24小时讨论了！发你一个G的资源包！", scores: {shill:3, front:2, data:1} },
       { text: "表面高兴，内心莫名紧张——以后粉丝群里又多了个跟我抢前排的人。", scores: {toxic:2, gf:3, ctrl:1} },
-      { text: "立刻建了一个二人小群，每天定时分享物料+行程+安利文案。", scores: {ctrl:3, shill:2, data:1} },
-      { text: "酷，又多一个人帮我打投了。", scores: {data:2, sane:2, buddha:1} }
+      { text: "立刻建了一个二人小群，每天定时分享好看的照片和有趣的视频。", scores: {ctrl:3, shill:2, data:1} },
+      { text: "酷，又多一个人一起聊天了。", scores: {data:2, sane:2, chill:1} }
     ]
   },
   {
@@ -358,7 +358,7 @@ const questions = [
   {
     q: "你发现有个私生饭长期跟踪你的爱豆，偷拍日常。",
     opts: [
-      { text: "报警+联系工作室+超话发通告+号召全网抵制，一条龙服务。", scores: {antihate:3, ctrl:2, sane:1} },
+      { text: "报警+联系工作室+提醒身边粉丝朋友注意保护爱豆隐私。", scores: {antihate:3, ctrl:2, sane:1} },
       { text: "虽然照片很清晰……但绝对不能因为图好看就纵容！坚决抵制私生！", scores: {face:3, climb:2, drama:1} },
       { text: "气到血压飙升，连续三天在各平台举报私生账号，一个都不放过。", scores: {antihate:2, drama:3, toxic:1} },
       { text: "心疼爱豆。默默在小号写了一篇'请给他/她私人空间'的呼吁文。", scores: {mom:3, emo:2, sane:1} }
@@ -368,18 +368,18 @@ const questions = [
     q: "你的爱豆突然关注了一个异性网红，评论区已经炸了。",
     opts: [
       { text: "冲到那个网红主页研究了对方三百条动态，确认'只是工作关系'后松了口气。", scores: {gf:3, ctrl:2, drama:1} },
-      { text: "在自家超话发了一篇'大家理智追星，不要过度解读'的长文。", scores: {sane:3, ctrl:2, buddha:1} },
-      { text: "不管了，先去这个网红底下控评'谢谢你关注我家哥哥/姐姐'。", scores: {ctrl:3, data:2, toxic:1} },
-      { text: "又塌了？行吧，我已经塌习惯了。（点开外卖APP自我安慰）", scores: {buddha:3, emo:1, climb:1} }
+      { text: "在自家超话发了一篇'大家理智追星，不要过度解读'的长文。", scores: {sane:3, ctrl:2, chill:1} },
+      { text: "不管了，先去这个网红底下友好留言'谢谢你关注我家哥哥/姐姐'。", scores: {ctrl:3, data:2, toxic:1} },
+      { text: "又塌了？行吧，我已经塌习惯了。（点开外卖APP自我安慰）", scores: {chill:3, emo:1, climb:1} }
     ]
   },
   {
     q: "你追了三年的爱豆最近作品质量明显下滑，你会？",
     opts: [
-      { text: "依然无条件支持！数据照做！安利照发！爱豆永远是对的！", scores: {loyal:3, data:2, toxic:1} },
+      { text: "依然支持！虽然有点失落，但相信他/她会越来越好的！", scores: {loyal:3, data:2, toxic:1} },
       { text: "在超话婉转地提了一嘴'希望团队能用点心'，被粉丝围攻了。", scores: {sane:3, drama:2, antihate:1} },
       { text: "难过。但我追的是这个人，不是作品。陪他/她一起成长。", scores: {mom:3, emo:2, loyal:1} },
-      { text: "悄悄减少了打投力度，把多出来的时间分给了新墙头。", scores: {climb:3, sane:2, buddha:1} }
+      { text: "悄悄减少了关注频率，把多出来的时间分给了其他兴趣。", scores: {climb:3, sane:2, chill:1} }
     ]
   },
   {
@@ -387,17 +387,17 @@ const questions = [
     opts: [
       { text: "笑了。我追星赚的快乐比你一辈子赚的都多，你管得着吗？", scores: {sane:3, loyal:2, drama:1} },
       { text: "委屈到哭。他们不懂追星带给我的力量和意义。", scores: {emo:3, gf:2, mom:1} },
-      { text: "无视。跟不追星的人解释追星，等于跟鱼解释爬树。", scores: {buddha:3, sane:2, toxic:1} },
+      { text: "无视。跟不追星的人解释追星，等于跟鱼解释爬树。", scores: {chill:3, sane:2, toxic:1} },
       { text: "反手给对方做了一个安利PPT，企图把对方也拉下水。", scores: {shill:3, ctrl:2, data:1} }
     ]
   },
   {
     q: "最后一题：你觉得你和爱豆之间的关系，最像什么？",
     opts: [
-      { text: "我是他/她的远房老母亲，操碎了一颗心。", scores: {mom:3, emo:2, loyal:1} },
-      { text: "我是他/她的在逃经纪人，数据、公关、危机处理我全包。", scores: {data:3, ctrl:2, antihate:1} },
+      { text: "我是他/她的远房老母亲，一直默默牵挂着。", scores: {mom:3, emo:2, loyal:1} },
+      { text: "我是他/她的编外小助手，行程、作品、新动态我全关注。", scores: {data:3, ctrl:2, antihate:1} },
       { text: "我是他/她不知道存在的灵魂伴侣——单方面的。", scores: {gf:3, emo:2, face:1} },
-      { text: "我是一只在花丛中飞来飞去的蜜蜂——今天采这朵，明天采那朵。", scores: {climb:3, buddha:2, sane:1} }
+      { text: "我是一只在花丛中飞来飞去的蜜蜂——今天采这朵，明天采那朵。", scores: {climb:3, chill:2, sane:1} }
     ]
   }
 ];
@@ -405,16 +405,16 @@ const questions = [
 // ========== 24种追星灵魂人格 ==========
 const results = [
   {
-    code: "DATA-G", name: "数据女工/男工", emoji: "⌨️",
-    tagline: "'今天你打投了吗？没有的话不要跟我说话。'",
+    code: "DATA-G", name: "勤劳小蜜蜂", emoji: "⌨️",
+    tagline: "'今天你签到了吗？没有的话不配说爱他/她。'",
     dims: {data:95, ctrl:85, loyal:75, krypton:60, sane:40},
-    desc: "你追星的方式不是追，是<strong>上班</strong>。超话签到、转发抽奖、控评反黑、打榜投票，你的追星日程比公司KPI还严格。你的手机里有8个小号，每个都有独立的使命。你不是在追星，你是在<strong>经营一家上市公司</strong>。"
+    desc: "你追星的方式不是追，是<strong>上班</strong>。超话签到、转发分享、点赞评论、关注动态，你的追星日程比公司日报还准时。你的手机提醒设了八个，生怕错过任何消息。你不是在追星，你是在<strong>认真经营一份热爱</strong>。"
   },
   {
-    code: "KRYP-T", name: "氪金战神", emoji: "💳",
-    tagline: "'花呗欠了多少？这是爱豆和我之间的秘密。'",
+    code: "KRYP-T", name: "应援达人", emoji: "💳",
+    tagline: "'为爱豆花的每一分钱，都是快乐的证明。'",
     dims: {krypton:95, loyal:80, face:65, front:60, data:50},
-    desc: "你的钱包是追星的第一受害者。专辑买十张、代言全入、周边秒杀、演唱会VIP——你用真金白银表达爱意。你的理财方式就是<strong>'爱豆出啥我买啥'</strong>。信用卡账单是你追星路上最沉重的勋章。"
+    desc: "你是追星路上最舍得付出的人。专辑会买、周边会收、演唱会必到——你用实际行动表达喜爱。虽然偶尔也心疼钱包，但看到爱豆开心你就觉得<strong>一切都值得</strong>。理性消费，快乐追星。"
   },
   {
     code: "MOM-F", name: "老母亲粉", emoji: "🧶",
@@ -435,19 +435,19 @@ const results = [
     desc: "你追星的唯一标准就是<strong>脸</strong>。业务能力？作品质量？人品？这些都是次要的。你的相册里99%是高清怼脸生图，你能精准分辨爱豆在不同光线下的颧骨阴影角度。你不是粉丝，你是<strong>行走的人脸识别高精度扫描仪</strong>。"
   },
   {
-    code: "BUDD-A", name: "佛系老粉", emoji: "🧘",
+    code: "BUDD-A", name: "淡定老粉", emoji: "🧘",
     tagline: "'追星嘛，开心就好，不必太认真。'",
-    dims: {buddha:95, sane:85, climb:65, loyal:50, data:30},
-    desc: "你追星的方式就是<strong>不追</strong>。不打投、不控评、不反黑、不氪金，但爱豆的每首歌你都听过、每个综艺你都看过。你是粉丝群里最安静的那个人，但粉龄比管理员还长。你的追星哲学是：<strong>缘分到了自然会见面，强求的都是私生。</strong>"
+    dims: {chill:95, sane:85, climb:65, loyal:50, data:30},
+    desc: "你追星的方式就是<strong>不折腾</strong>。不刷屏、不争论、不跟风、不冲动消费，但爱豆的每首歌你都听过、每个综艺你都看过。你是粉丝群里最安静的那个人，但粉龄比管理员还长。你的追星哲学是：<strong>缘分到了自然会见面，强求的都是私生。</strong>"
   },
   {
     code: "WALL-C", name: "职业爬墙选手", emoji: "🧗",
     tagline: "'我不是花心，我是博爱。'",
-    dims: {climb:95, face:80, buddha:70, sane:55, loyal:25},
+    dims: {climb:95, face:80, chill:70, sane:55, loyal:25},
     desc: "你的本命列表比通讯录还长。你平均每三个月换一个最爱的爱豆，但你从不觉得自己是三心二意——你只是<strong>爱得太广泛了</strong>。你的超话关注列表跨越日韩中泰四国，横跨唱跳演说各个领域。粉丝群里的人叫你'旅游粉'，你叫自己<strong>'多元化投资人'</strong>。"
   },
   {
-    code: "TOXC-U", name: "毒唯本唯", emoji: "☠️",
+    code: "TOXC-U", name: "专一守护者", emoji: "☠️",
     tagline: "'全世界只有我家哥哥/姐姐配拥有一切。'",
     dims: {toxic:95, loyal:90, antihate:80, ctrl:75, drama:60},
     desc: "你的爱是一把刀——朝外的那种。谁敢说你爱豆一句不好你就跟谁急。你对自家爱豆的保护欲已经溢出屏幕了，虽然有时候用力过猛，但出发点都是爱。你不是粉丝，你是爱豆的<strong>人形护盾，防御力MAX</strong>。"
@@ -462,19 +462,19 @@ const results = [
     code: "ANTI-H", name: "反黑斗士", emoji: "🛡️",
     tagline: "'只要我还有一口气，就没人能黑我家爱豆。'",
     dims: {antihate:95, ctrl:80, drama:75, data:70, loyal:65},
-    desc: "你是爱豆的<strong>人形防火墙</strong>。你的手机备忘录里存了两百条标准反黑话术，你的微博收藏夹全是举报教程。你的一天从搜索爱豆名字开始，到逐条消灭负面评论结束。你不追星，你<strong>上班</strong>——而且没有工资、没有加班费、全年无休。"
+    desc: "你是爱豆的<strong>人形防火墙</strong>。你总是第一时间发现不实信息，并耐心地用事实进行澄清。你习惯性地关注爱豆相关的讨论，遇到误解就温和但坚定地解释。你不追星，你<strong>守护</strong>——用真诚而非攻击。"
   },
   {
-    code: "CTRL-P", name: "控评总指挥", emoji: "🎖️",
-    tagline: "'姐妹们！一人十条！格式统一！不许带emoji！上！'",
+    code: "CTRL-P", name: "应援组织者", emoji: "🎖️",
+    tagline: "'姐妹们！新物料出了！一起来讨论！冲！'",
     dims: {ctrl:95, data:90, antihate:80, loyal:70, toxic:55},
-    desc: "你是粉丝群的<strong>灵魂人物和精神领袖</strong>。每次有通稿你第一个发控评格式，每次有热搜你第一个安排话术。你的管理能力强到可以去当CEO，但你选择了把才华奉献给爱豆的评论区。你的组织协调能力令人叹为观止——<strong>联合国应该高薪聘请你</strong>。"
+    desc: "你是粉丝群的<strong>灵魂人物和精神领袖</strong>。每次有新动态你第一个组织大家讨论，每次有活动你第一个张罗应援。你的管理能力强到可以去当CEO，但你选择了把才华奉献给爱豆的粉丝社区。你的组织协调能力令人叹为观止——<strong>联合国应该高薪聘请你</strong>。"
   },
   {
     code: "FRNT-L", name: "前线战地记者", emoji: "📸",
     tagline: "'只要爱豆出现在方圆五公里内，我就在。'",
     dims: {front:95, krypton:80, face:75, data:65, loyal:60},
-    desc: "你是追星届的<strong>战地记者</strong>。任何公开活动你都在现场第一排，你的相机比你的脸更经常出现在爱豆面前。你坐过最早的航班、排过最长的队、淋过最大的雨——只为了那<strong>几秒钟的对视（可能是你的幻觉）</strong>。你的行李箱里永远有一台备用相机和三块充满的电池。"
+    desc: "你是追星届的<strong>战地记者</strong>。任何公开活动你都在现场第一排，你的相机比你的脸更经常出现在爱豆面前。你参加过最早的签售、排过最长的队、淋过最大的雨——只为了那<strong>几秒钟的现场体验</strong>。你的行李箱里永远有应援物和满格电的手机。"
   },
   {
     code: "EMO-S", name: "emo追星人", emoji: "🥹",
@@ -491,7 +491,7 @@ const results = [
   {
     code: "SANE-R", name: "理智粉代表", emoji: "🧐",
     tagline: "'我追星，但我不疯。……大部分时候。'",
-    dims: {sane:95, buddha:80, mom:65, data:50, loyal:45},
+    dims: {sane:95, chill:80, mom:65, data:50, loyal:45},
     desc: "你是饭圈里的<strong>稀有物种</strong>——一个有脑子的粉丝。你支持爱豆但不盲目，你花钱但有预算，你反黑但不参与骂战。你经常在粉丝群里扮演'冷静的那个人'，并因此被两个极端同时攻击。你的存在证明了：<strong>追星和保持理智可以共存，虽然很难</strong>。"
   },
   {
@@ -505,37 +505,37 @@ const results = [
     code: "CP-BR", name: "CP脑患者", emoji: "💞",
     tagline: "'他们之间的眼神交流，我能写三万字同人文。'",
     dims: {drama:90, gf:85, face:80, climb:70, emo:65},
-    desc: "你追的不是一个人，你追的是<strong>一对</strong>。你能在两个人同框0.5秒的画面里提取出47个糖点，并将其发展成一部完整的言情小说。你的浏览器永远开着AO3和LOFTER，你的写作速度在同人圈排名前三。你不是粉丝，你是<strong>爱情的考古学家</strong>。"
+    desc: "你追的不是一个人，你追的是<strong>一对</strong>。你能在两个人同框0.5秒的画面里提取出47个糖点，并将其发展成一部完整的言情小说。你的脑内剧场永远在上映，你的想象力在粉丝圈排名前三。你不是粉丝，你是<strong>爱情的考古学家</strong>。"
   },
   {
     code: "ZOMBIE", name: "塌房幸存者", emoji: "🏚️",
     tagline: "'别人塌房哭天抢地，我塌房面不改色——因为已经习惯了。'",
-    dims: {buddha:90, sane:85, climb:80, emo:70, loyal:40},
+    dims: {chill:90, sane:85, climb:80, emo:70, loyal:40},
     desc: "你经历过的塌房次数已经可以出一本《粉丝灾后重建指南》了。从恋爱塌、到人品塌、到业务塌，你全经历过。现在的你已经进化成了<strong>追星界的打不死的小强</strong>——塌就塌吧，反正明天还有新墙头。你的情绪恢复速度比5G还快。"
   },
   {
     code: "GHOST", name: "透明追星人", emoji: "👤",
     tagline: "'我追星，但没有人知道我追星。'",
-    dims: {buddha:90, sane:80, face:70, loyal:65, data:30},
+    dims: {chill:90, sane:80, face:70, loyal:65, data:30},
     desc: "你是追星界的<strong>幽灵</strong>。你从不发超话、不进粉丝群、不买周边、不去现场——但你把爱豆所有的作品都看了三遍以上。你的追星全程在小号和无痕浏览器中完成。你最大的恐惧不是爱豆塌房，而是<strong>被同事发现你追星</strong>。"
   },
   {
-    code: "RICH-M", name: "富婆/富哥粉", emoji: "👑",
+    code: "RICH-M", name: "慷慨应援粉", emoji: "👑",
     tagline: "'钱解决不了的追星问题，那是钱不够多。'",
     dims: {krypton:95, front:90, ctrl:75, shill:70, sane:55},
-    desc: "你追星不看预算，只看效果。前排票？买。限量周边？全包。爱豆代言？每样十件起。你是品牌方最爱的粉丝类型，也是爱豆工作室数据报表上最亮的那颗星。你用实际行动证明了：<strong>有钱人的追星快乐，你根本想象不到</strong>。"
+    desc: "你追星舍得花心思也舍得花钱。好位置的票？安排。喜欢的周边？入手。爱豆代言？支持一下。你觉得喜欢就要大方表达，但也懂得量力而行。你用实际行动证明了：<strong>追星的快乐，在于真心而非金额</strong>。"
   },
   {
     code: "SLEEP", name: "养老追星人", emoji: "🛋️",
     tagline: "'我还在追吗？大概……算是吧。'",
-    dims: {buddha:95, sane:90, climb:60, loyal:55, data:20},
-    desc: "你曾经也疯狂过，但现在已经进入<strong>追星退休模式</strong>。你不再打投、不再控评、不再蹲直播。偶尔刷到爱豆的新闻会点个赞，看到好看的图会默默保存。你跟爱豆的关系就像一段<strong>已经过了热恋期但还没分手的感情</strong>——淡淡的，但还在。"
+    dims: {chill:95, sane:90, climb:60, loyal:55, data:20},
+    desc: "你曾经也疯狂过，但现在已经进入<strong>追星退休模式</strong>。你不再天天签到、不再逢帖必回、不再蹲直播。偶尔刷到爱豆的新闻会点个赞，看到好看的图会默默保存。你跟爱豆的关系就像一段<strong>已经过了热恋期但还没分手的感情</strong>——淡淡的，但还在。"
   },
   {
     code: "MULTI", name: "全能型追星战士", emoji: "⚔️",
-    tagline: "'打投我来、反黑我来、控评我来、前线我也来。累吗？不累。'",
+    tagline: "'签到我来、应援我来、澄清我来、现场我也来。累吗？不累。'",
     dims: {data:90, antihate:90, ctrl:85, front:80, krypton:75},
-    desc: "你一个人就是一支军队。别人分工合作的事情，你一个人全干了。你白天做数据，晚上反黑，周末蹲前线，月底还要氪金冲销量。你的追星强度已经超过了大部分人的工作强度。你不是粉丝，你是爱豆的<strong>一人运营团队（无薪）</strong>。"
+    desc: "你一个人就是一支军队。别人分工合作的事情，你一个人全干了。你白天关注动态，晚上整理物料，周末蹲现场，月底还要抢周边。你的追星强度已经超过了大部分人的工作强度。你不是粉丝，你是爱豆的<strong>一人运营团队（无薪）</strong>。"
   },
   {
     code: "CASH-C", name: "事业粉", emoji: "📊",
@@ -617,19 +617,19 @@ function showResult() {
   });
   const r = best;
   const dn = {
-    krypton:'氪金力', data:'数据力', face:'颜控度', mom:'妈粉值', gf:'恋爱脑',
-    toxic:'毒唯度', buddha:'佛系度', climb:'爬墙率', shill:'安利欲', antihate:'反黑力',
-    ctrl:'控评力', front:'前线力', drama:'戏精值', emo:'emo值', sane:'理智值',
+    krypton:'应援力', data:'数据力', face:'颜控度', mom:'妈粉值', gf:'恋爱脑',
+    toxic:'专一度', chill:'淡定度', climb:'爬墙率', shill:'安利欲', antihate:'反黑力',
+    ctrl:'组织力', front:'前线力', drama:'戏精值', emo:'emo值', sane:'理智值',
     loyal:'忠诚度'
   };
   const dc = {
     krypton:'#ffd93d', data:'#38bdf8', face:'#ff6bcd', mom:'#6bcb77', gf:'#ff6b6b',
-    toxic:'#9333ea', buddha:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
+    toxic:'#9333ea', chill:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
     ctrl:'#3b82f6', front:'#a855f7', drama:'#ec4899', emo:'#60a5fa', sane:'#10b981',
     loyal:'#f59e0b'
   };
   let dh = '';
-  const dims = ['krypton','data','face','mom','gf','toxic','buddha','climb','shill','antihate','ctrl','front','drama','emo','sane','loyal'];
+  const dims = ['krypton','data','face','mom','gf','toxic','chill','climb','shill','antihate','ctrl','front','drama','emo','sane','loyal'];
   dims.forEach(d => {
     if(!dn[d]) return;
     const v = Math.min(99, Math.max(5, Math.round((scores[d]||0)/20*100+Math.random()*12)));
@@ -658,12 +658,12 @@ function showResult() {
       </div>
     </div>
     <div class="disclaimer" style="margin-top:20px;">
-      ⚠️ <strong>温馨提示</strong>：本结果由饭圈玄学引擎v1.0生成。如果你觉得不准，说明你还没认清自己的追星本质。如果你觉得准，那恭喜你——<strong>你已经没救了，但饭圈欢迎你</strong>。
+      ⚠️ <strong>温馨提示</strong>：本结果由饭圈玄学引擎v1.0生成。如果你觉得不准，说明你还没认清自己的追星本质。如果你觉得准，那恭喜你——<strong>追星的方式千万种，开心最重要</strong>。
     </div>
     <div class="footer-note">
       FSTI · Fandom Soul Type Indicator · 追星灵魂人格指示器<br>
       灵感来源：SBTI测试 · 本测试纯属饭圈整活<br>
-      仅供娱乐，请勿用于粉丝战争、超话举报或脱粉回踩<br>
+      仅供娱乐，倡导理性追星、文明追星<br>
       © 2026 FSTI · 你追的不是星，是你自己
     </div>
     <img class="brand-logo" src="${LOGO_SRC}" alt="QQ音乐">
@@ -809,12 +809,12 @@ function doDrawPoster(r, scores, avatarImg) {
     // 维度条
     const dn = {
       krypton:'\u6c2a\u91d1\u529b', data:'\u6570\u636e\u529b', face:'\u989c\u63a7\u5ea6', mom:'\u5988\u7c89\u503c', gf:'\u604b\u7231\u8111',
-      toxic:'\u6bd2\u552f\u5ea6', buddha:'\u4f5b\u7cfb\u5ea6', climb:'\u722c\u5899\u7387', shill:'\u5b89\u5229\u6b32', antihate:'\u53cd\u9ed1\u529b',
+      toxic:'\u6bd2\u552f\u5ea6', chill:'\u4f5b\u7cfb\u5ea6', climb:'\u722c\u5899\u7387', shill:'\u5b89\u5229\u6b32', antihate:'\u53cd\u9ed1\u529b',
       ctrl:'\u63a7\u8bc4\u529b', front:'\u524d\u7ebf\u529b', drama:'\u620f\u7cbe\u503c', emo:'emo\u503c', sane:'\u7406\u667a\u503c', loyal:'\u5fe0\u8bda\u5ea6'
     };
     const dc = {
       krypton:'#ffd93d', data:'#38bdf8', face:'#ff6bcd', mom:'#6bcb77', gf:'#ff6b6b',
-      toxic:'#9333ea', buddha:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
+      toxic:'#9333ea', chill:'#94a3b8', climb:'#f97316', shill:'#22d3ee', antihate:'#ef4444',
       ctrl:'#3b82f6', front:'#a855f7', drama:'#ec4899', emo:'#60a5fa', sane:'#10b981', loyal:'#f59e0b'
     };
     const allDims = Object.keys(dn);
