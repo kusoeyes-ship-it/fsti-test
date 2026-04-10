@@ -214,6 +214,70 @@ body {
   75%{ filter: drop-shadow(-3px 0 15px rgba(168,85,247,0.1)); }
   100%{ filter: drop-shadow(0 0 6px rgba(168,85,247,0)); }
 }
+
+/* 代号输入 */
+.nickname-section { margin: 32px 0; }
+.nickname-input {
+  display: block; width: 100%; max-width: 360px; padding: 14px 0;
+  font-size: 18px; font-weight: 400; letter-spacing: 2px; text-align: center;
+  background: transparent; color: #fff;
+  border: none; border-bottom: 1.5px solid rgba(168,85,247,0.3);
+  outline: none; font-family: 'Inter', -apple-system, sans-serif;
+  transition: border-color 0.3s;
+}
+.nickname-input::placeholder { color: rgba(255,255,255,0.15); }
+.nickname-input:focus { border-bottom-color: #a855f7; }
+
+/* 场景标题 */
+.scene-tag {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(168,85,247,0.6); margin-bottom: 8px;
+}
+.scene-title {
+  font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.25);
+  margin-bottom: 20px; letter-spacing: 1px;
+}
+
+/* 过渡动画 */
+.transition-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: #050508; z-index: 9000;
+  display: flex; justify-content: center; align-items: center;
+  flex-direction: column; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.transition-overlay.show { opacity: 1; pointer-events: all; }
+.transition-text {
+  font-size: 14px; font-weight: 400; color: rgba(168,85,247,0.7);
+  letter-spacing: 3px; animation: blink 1s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+/* 解锁动画 */
+.unlock-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: #050508; z-index: 9000;
+  display: flex; justify-content: center; align-items: center;
+  flex-direction: column; gap: 12px;
+}
+.unlock-line {
+  font-size: 13px; font-weight: 400; color: rgba(168,85,247,0.6);
+  letter-spacing: 2px; opacity: 0; animation: unlockFade 0.5s forwards;
+}
+@keyframes unlockFade { to { opacity: 1; } }
+
+/* 中场提示 */
+.midway-toast {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  padding: 16px 32px; background: rgba(168,85,247,0.1);
+  border: 1px solid rgba(168,85,247,0.3);
+  color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 400;
+  letter-spacing: 2px; z-index: 8000; opacity: 0;
+  animation: toastShow 2s ease-in-out forwards;
+  pointer-events: none;
+}
+@keyframes toastShow { 0%{opacity:0;transform:translate(-50%,-50%) scale(0.9)} 20%{opacity:1;transform:translate(-50%,-50%) scale(1)} 80%{opacity:1} 100%{opacity:0} }
 </style>
 </head>
 <body>
@@ -610,6 +674,8 @@ const results = [
 
 // ========== 测试逻辑 ==========
 let currentQ = 0;
+let playerName = '';
+const sceneNames = ["深夜微博事件","舆论风暴","凌晨三点","钱包危机","命运邂逅","审美之战","生日企划","对手新歌","剪辑风波","群聊名场面","手机考古","灵魂拷问","告别时刻","友谊试炼","演唱会争夺","隐私保卫战","风格突变","作品争议","追星质疑","终极关系"];
 let answers = [];
 
 function showPage(id) {
@@ -630,10 +696,16 @@ function calcScores() {
 }
 
 function startTest() {
+  const input = document.getElementById('nickname-input');
+  playerName = (input && input.value.trim()) || '\u795e\u79d8\u7c89\u4e1d';
   currentQ = 0;
   answers = new Array(questions.length).fill(-1);
-  showPage('page-test');
-  renderQuestion();
+  // 过渡动画
+  const overlay = document.getElementById('transition-overlay');
+  const tt = document.getElementById('transition-text');
+  tt.textContent = playerName + '\uff0c\u6b63\u5728\u521d\u59cb\u5316\u4f60\u7684\u8ffd\u661f\u7075\u9b42\u6863\u6848\u2026';
+  overlay.classList.add('show');
+  setTimeout(()=>{ overlay.classList.remove('show'); showPage('page-test'); renderQuestion(); }, 1200);
 }
 
 function renderQuestion() {
@@ -642,7 +714,7 @@ function renderQuestion() {
   document.getElementById('progress').style.width = ((currentQ+1)/questions.length*100)+'%';
   document.getElementById('progress-text').textContent = `${currentQ+1} / ${questions.length}`;
   const prev = answers[currentQ];
-  let html = `<div class="question-card"><div class="question-text">${q.q}</div>`;
+  let html = `<div class="question-card"><div class="scene-tag">SCENE ${String(currentQ+1).padStart(2,'0')}</div><div class="scene-title">${sceneNames[currentQ] || ''}</div><div class="question-text">${playerName}\uff0c${q.q}</div>`;
   q.opts.forEach((o,i) => {
     html += `<button class="option${i===prev?' selected':''}" data-idx="${i}">${o.text}</button>`;
   });
@@ -658,7 +730,52 @@ function renderQuestion() {
 function selectOption(idx) {
   answers[currentQ] = idx;
   currentQ++;
-  if(currentQ < questions.length) renderQuestion(); else showResult();
+  if(currentQ < questions.length) {
+    // 中场提示（第10题后）
+    if(currentQ === 10) {
+      const toast = document.createElement('div');
+      toast.className = 'midway-toast';
+      toast.textContent = playerName + ' \u7684\u8ffd\u661f\u7075\u9b42\u6b63\u5728\u88ab\u89e3\u6790\u2026';
+      document.body.appendChild(toast);
+      setTimeout(()=>toast.remove(), 2200);
+    }
+    // 每5题一次短暂过渡
+    if(currentQ % 5 === 0 && currentQ < questions.length) {
+      const overlay = document.getElementById('transition-overlay');
+      const tt = document.getElementById('transition-text');
+      const msgs = ['\u7075\u9b42\u6570\u636e\u6536\u96c6\u4e2d\u2026','\u4eba\u683c\u77e9\u9635\u8fd0\u7b97\u4e2d\u2026','\u6700\u7ec8\u5206\u6790\u5373\u5c06\u5f00\u59cb\u2026'];
+      tt.textContent = msgs[Math.floor(currentQ/5)-1] || '\u5206\u6790\u4e2d\u2026';
+      overlay.classList.add('show');
+      setTimeout(()=>{ overlay.classList.remove('show'); renderQuestion(); }, 600);
+    } else {
+      renderQuestion();
+    }
+  } else {
+    // 出结果：解锁动画
+    const overlay = document.getElementById('transition-overlay');
+    const tt = document.getElementById('transition-text');
+    tt.innerHTML = '';
+    overlay.classList.add('show');
+    const lines = [
+      '\u8ffd\u661f\u7075\u9b42\u5206\u6790\u5b8c\u6210',
+      playerName + ' \u7684\u4eba\u683c\u6863\u6848\u5df2\u751f\u6210',
+      '\u6b63\u5728\u89e3\u9501\u2026'
+    ];
+    lines.forEach((line, i) => {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'unlock-line';
+        el.style.animationDelay = '0s';
+        el.textContent = line;
+        tt.appendChild(el);
+      }, i * 600);
+    });
+    setTimeout(() => {
+      overlay.classList.remove('show');
+      tt.innerHTML = '';
+      showResult();
+    }, 2400);
+  }
 }
 
 function goPrev() { if(currentQ>0){ currentQ--; renderQuestion(); } }
@@ -729,6 +846,7 @@ function showResult() {
         <img src="${AVATAR_MAP[r.code] || ''}" style="width:140px;height:140px;border-radius:50%;border:2px solid rgba(168,85,247,0.2);background:#111;object-fit:cover;" onerror="this.style.display='none'">
       </div>
 
+      <div style="font-size:13px;font-weight:400;color:rgba(255,255,255,0.3);margin-bottom:4px;letter-spacing:1px;">${playerName} 的追星灵魂档案</div>
       <div class="result-code">${r.code}</div>
       <div class="result-name">${r.name}</div>
 
@@ -1027,6 +1145,7 @@ document.getElementById('btn-poster-save').addEventListener('click', function(){
   link.click();
 });
 </script>
+<div class="transition-overlay" id="transition-overlay"><div class="transition-text" id="transition-text"></div></div>
 <div class="fsti-watermark">Fsti</div>
 </body>
 </html>
