@@ -734,65 +734,88 @@ function doDrawPoster(r, scores, avatarImg) {
   const canvas = document.getElementById('poster-canvas');
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
-  const purple = '#a855f7';
+  const P = '#a855f7';
 
   // 纯黑背景
-  ctx.fillStyle = '#08080f';
-  ctx.fillRect(0, 0, W, H);
-  // 微弱紫色光晕
-  const glow = ctx.createRadialGradient(W/2, H*0.3, 0, W/2, H*0.3, 380);
-  glow.addColorStop(0, 'rgba(120,50,200,0.06)');
-  glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = '#08080f'; ctx.fillRect(0, 0, W, H);
+  const glow = ctx.createRadialGradient(W/2, H*0.32, 0, W/2, H*0.32, 420);
+  glow.addColorStop(0, 'rgba(120,50,200,0.07)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
-  // 稀疏紫色星点
-  for(let i=0;i<25;i++){ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,Math.random()*1+0.3,0,Math.PI*2);ctx.fillStyle='rgba(168,85,247,'+(0.1+Math.random()*0.2)+')';ctx.fill();}
+  for(let i=0;i<20;i++){ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,Math.random()*1+0.3,0,Math.PI*2);ctx.fillStyle='rgba(168,85,247,'+(0.08+Math.random()*0.15)+')';ctx.fill();}
 
-  // 顶部小标题
-  ctx.textAlign='center'; ctx.font='18px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#555';
-  ctx.fillText('FSTI \u00b7 \u8ffd\u661f\u7075\u9b42\u4eba\u683c\u6d4b\u8bd5', W/2, 45);
+  // === 顶部标题 ===
+  ctx.textAlign='center';
+  ctx.font='22px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#666';
+  ctx.fillText('FSTI \u00b7 \u8ffd\u661f\u7075\u9b42\u4eba\u683c\u6d4b\u8bd5', W/2, 42);
 
-  // 头像（大，居中）
+  // === 头像 ===
   if(avatarImg){
-    const aS=200, aY=80;
-    ctx.beginPath();ctx.arc(W/2,aY+aS/2,aS/2+5,0,Math.PI*2);ctx.strokeStyle='rgba(168,85,247,0.25)';ctx.lineWidth=2;ctx.stroke();
+    const aS=180, aY=65;
+    ctx.beginPath();ctx.arc(W/2,aY+aS/2,aS/2+4,0,Math.PI*2);ctx.strokeStyle='rgba(168,85,247,0.25)';ctx.lineWidth=2;ctx.stroke();
     ctx.save();ctx.beginPath();ctx.arc(W/2,aY+aS/2,aS/2,0,Math.PI*2);ctx.clip();ctx.drawImage(avatarImg,W/2-aS/2,aY,aS,aS);ctx.restore();
   }
 
-  let y=320;
-  // 代号
-  ctx.textAlign='center';ctx.font='bold 42px -apple-system,PingFang SC,sans-serif';ctx.fillStyle=purple;ctx.fillText(r.code,W/2,y);y+=40;
-  // 名称
-  ctx.font='bold 30px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='#fff';ctx.fillText(r.name,W/2,y);y+=28;
-  // 匹配度
-  ctx.font='16px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='#555';ctx.fillText('\u5339\u914d\u5ea6 '+r.matchPct+'%',W/2,y);y+=35;
-  // 分隔线
-  ctx.strokeStyle='rgba(168,85,247,0.15)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(120,y);ctx.lineTo(W-120,y);ctx.stroke();y+=28;
-  // tagline
-  ctx.font='20px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='rgba(255,255,255,0.8)';
-  y=wrapText(ctx,r.tagline.replace(/'/g,''),W/2,y,W-140,28);y+=20;
-  // 描述
-  ctx.font='16px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='#888';ctx.textAlign='left';
-  y=wrapText(ctx,r.desc.replace(/<[^>]+>/g,''),65,y,W-130,25);y+=28;
+  let y = 290;
 
-  // 维度条（统一紫色）
-  const dn={krypton:'\u5e94\u63f4\u529b',data:'\u6570\u636e\u529b',face:'\u989c\u63a7\u5ea6',mom:'\u5988\u7c89\u503c',gf:'\u604b\u7231\u8111',toxic:'\u4e13\u4e00\u5ea6',chill:'\u6de1\u5b9a\u5ea6',climb:'\u722c\u5899\u7387',shill:'\u5b89\u5229\u6b32',antihate:'\u53cd\u9ed1\u529b',ctrl:'\u7ec4\u7ec7\u529b',front:'\u524d\u7ebf\u529b',drama:'\u620f\u7cbe\u503c',emo:'emo\u503c',sane:'\u7406\u667a\u503c',loyal:'\u5fe0\u8bda\u5ea6'};
+  // === 代号（大） ===
+  ctx.textAlign='center';
+  ctx.font='bold 56px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle=P;
+  ctx.fillText(r.code, W/2, y); y+=50;
+
+  // === 名称（大） ===
+  ctx.font='bold 40px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#fff';
+  ctx.fillText(r.name, W/2, y); y+=35;
+
+  // === 匹配度 ===
+  ctx.font='20px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#666';
+  ctx.fillText('\u5339\u914d\u5ea6 '+r.matchPct+'%', W/2, y); y+=30;
+
+  // === 分隔线 ===
+  ctx.strokeStyle='rgba(168,85,247,0.2)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(80,y); ctx.lineTo(W-80,y); ctx.stroke(); y+=28;
+
+  // === tagline（大） ===
+  ctx.font='bold 26px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.85)';
+  y=wrapText(ctx, r.tagline.replace(/'/g,''), W/2, y, W-100, 34); y+=20;
+
+  // === 描述（中等大小，填满中部） ===
+  ctx.font='22px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#aaa'; ctx.textAlign='left';
+  y=wrapText(ctx, r.desc.replace(/<[^>]+>/g,''), 50, y, W-100, 32); y+=30;
+
+  // === 维度条（加大） ===
+  const dn={krypton:'\u5e94\u63f4\u529b',data:'\u6570\u636e\u529b',face:'\u989c\u63a7\u5ea6',mom:'\u5988\u7c89\u503c',gf:'\u5fc3\u52a8\u503c',toxic:'\u4e13\u4e00\u5ea6',chill:'\u6de1\u5b9a\u5ea6',climb:'\u722c\u5899\u7387',shill:'\u5b89\u5229\u6b32',antihate:'\u53cd\u9ed1\u529b',ctrl:'\u7ec4\u7ec7\u529b',front:'\u524d\u7ebf\u529b',drama:'\u620f\u7cbe\u503c',emo:'emo\u503c',sane:'\u7406\u667a\u503c',loyal:'\u5fe0\u8bda\u5ea6'};
   const dv=Object.keys(dn).map(d=>({k:d,v:Math.min(99,Math.max(5,Math.round((scores[d]||0)/20*100+Math.random()*12)))})).sort((a,b)=>b.v-a.v).slice(0,5);
-  dv.forEach(d=>{y+=28;ctx.font='14px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='#777';ctx.textAlign='left';ctx.fillText(dn[d.k],65,y);ctx.fillStyle='rgba(168,85,247,0.1)';roundRect(ctx,155,y-10,360,13,6);ctx.fill();ctx.fillStyle='rgba(168,85,247,'+(0.35+d.v/100*0.5)+')';roundRect(ctx,155,y-10,360*(d.v/100),13,6);ctx.fill();ctx.fillStyle=purple;ctx.textAlign='right';ctx.font='13px -apple-system,PingFang SC,sans-serif';ctx.fillText(d.v+'%',565,y);});
+  dv.forEach(d=>{
+    y+=34;
+    ctx.font='18px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#888'; ctx.textAlign='left';
+    ctx.fillText(dn[d.k], 50, y);
+    ctx.fillStyle='rgba(168,85,247,0.1)'; roundRect(ctx,150,y-12,420,18,9); ctx.fill();
+    ctx.fillStyle='rgba(168,85,247,'+(0.35+d.v/100*0.55)+')'; roundRect(ctx,150,y-12,420*(d.v/100),18,9); ctx.fill();
+    ctx.fillStyle=P; ctx.textAlign='right'; ctx.font='bold 17px -apple-system,PingFang SC,sans-serif';
+    ctx.fillText(d.v+'%', 620, y);
+  });
 
-  // 底部：左文案+右二维码
-  const qrImg=new Image(),logoImg=new Image();let ld=0;
+  // === 底部：左文案+右二维码（放大） ===
+  const qrImg=new Image(),logoImg=new Image(); let ld=0;
   function done(){ld++;if(ld<2)return;
-    const by=H-200;
-    ctx.strokeStyle='rgba(168,85,247,0.1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(60,by);ctx.lineTo(W-60,by);ctx.stroke();
-    const qS=85,qX=W-60-qS,qY=by+20;
-    ctx.fillStyle='#fff';roundRect(ctx,qX-5,qY-5,qS+10,qS+10,5);ctx.fill();ctx.drawImage(qrImg,qX,qY,qS,qS);
-    ctx.textAlign='left';ctx.font='bold 18px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='#fff';ctx.fillText('\u6d4b\u6d4b\u4f60\u7684\u8ffd\u661f\u4eba\u683c',60,qY+22);
-    ctx.font='14px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='#555';ctx.fillText('\u626b\u7801\u6216\u957f\u6309\u8bc6\u522b\u5f00\u59cb\u6d4b\u8bd5',60,qY+45);
-    const lH=20,lW=lH*(logoImg.naturalWidth/logoImg.naturalHeight);ctx.drawImage(logoImg,60,qY+62,lW,lH);
-    ctx.textAlign='center';ctx.font='11px -apple-system,PingFang SC,sans-serif';ctx.fillStyle='rgba(255,255,255,0.15)';ctx.fillText('FSTI \u00b7 \u4ec5\u4f9b\u5a31\u4e50',W/2,H-12);
+    const by=H-180;
+    ctx.strokeStyle='rgba(168,85,247,0.15)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(50,by); ctx.lineTo(W-50,by); ctx.stroke();
+    const qS=100, qX=W-50-qS, qY=by+15;
+    ctx.fillStyle='#fff'; roundRect(ctx,qX-6,qY-6,qS+12,qS+12,6); ctx.fill();
+    ctx.drawImage(qrImg,qX,qY,qS,qS);
+    ctx.textAlign='left';
+    ctx.font='bold 22px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#fff';
+    ctx.fillText('\u6d4b\u6d4b\u4f60\u7684\u8ffd\u661f\u4eba\u683c', 50, qY+28);
+    ctx.font='16px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='#666';
+    ctx.fillText('\u626b\u7801\u6216\u957f\u6309\u8bc6\u522b\u5f00\u59cb', 50, qY+55);
+    const lH=22, lW=lH*(logoImg.naturalWidth/logoImg.naturalHeight);
+    ctx.drawImage(logoImg, 50, qY+72, lW, lH);
+    ctx.textAlign='center'; ctx.font='12px -apple-system,PingFang SC,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.15)';
+    ctx.fillText('FSTI \u00b7 \u4ec5\u4f9b\u5a31\u4e50', W/2, H-10);
     document.getElementById('poster-overlay').classList.add('show');
   }
-  qrImg.onload=done;logoImg.onload=done;qrImg.src=QR_SRC;logoImg.src=LOGO_SRC;
+  qrImg.onload=done; logoImg.onload=done; qrImg.src=QR_SRC; logoImg.src=LOGO_SRC;
 }
 
 // 文字换行工具
