@@ -190,7 +190,7 @@ body {
 .poster-save:hover { background: #c084fc; }
 .poster-close:hover { border-color: #fff; color: #fff; }
 
-.brand-logo { display: block; margin: 20px 0 5px; height: 24px; opacity: 0.4; }
+.brand-logo { display: block; margin: 20px 0 5px; height: 48px; opacity: 0.4; }
 .brand-text { color: rgba(255,255,255,0.1); font-size: 10px; margin-bottom: 10px; }
 
 /* 底部镂空水印 */
@@ -339,186 +339,195 @@ body {
 // ========== 15个追星人格维度 ==========
 // data: 应援力, 数据力, 颜控度, 妈粉值, 女友粉, 专一度, 淡定度, 爬墙率, 安利欲, 反黑力, 组织力, 前线力, cp脑, 风浪承受, 理智值
 
-// ========== 20道追星灵魂拷问 ==========
+// ========== 20道追星灵魂拷问（三幕剧） ==========
 const questions = [
+  // ══════════════════════════════════════
+  // 第一幕：入坑 · 心动的开始（Q1-7）
+  // ══════════════════════════════════════
   {
-    q: "你的爱豆突然宣布暂别舞台去进修了，你的第一反应是？",
+    q: "还记得你第一次看到爱豆时的反应吗？最接近哪个？",
     opts: [
-      { text: "手机一摔，微博一关，朋友圈一发：'天哪，没有舞台看了，我要怎么活？'", scores: {spark:3, drama:2, loyal:1} },
-      { text: "冷静分析进修计划，研究回归时间表，已经开始倒计时了。", scores: {mom:3, ctrl:2, sane:1} },
-      { text: "无所谓，只要他/她开心就好……（嘴上说着，眼泪已经流到下巴）", scores: {chill:2, emo:3, mom:1} },
-      { text: "有点失落，但先去听听其他宝藏歌手的歌填补空虚吧。", scores: {climb:3, chill:2, face:1} }
+      { text: "天哪，这个人怎么可以长成这样！脑子当场停止运转。", scores: {face:3, spark:2, emo:1} },
+      { text: "在某个舞台/作品里被实力圈粉——这人也太有才了吧。", scores: {sane:3, data:2, loyal:1} },
+      { text: "说不上来……就是一种莫名的吸引力，像命中注定。", scores: {spark:3, emo:2, chill:1} },
+      { text: "朋友安利了一百遍我才去看，结果一看就沦陷了。", scores: {climb:3, shill:2, chill:1} }
     ]
   },
   {
-    q: "你发现网上流传的爱豆路人照被P得完全失真了。你会？",
+    q: "入坑后的第一个夜晚，你在干什么？",
     opts: [
-      { text: "立刻冲进评论区逐条反驳：'原图在这！！！麻烦看清楚再说话好吗！！！'", scores: {antihate:3, ctrl:2, loyal:1} },
-      { text: "默默保存了原图和P图——等等，P图好像也挺好看的？算了都存了。", scores: {face:3, chill:2, climb:1} },
-      { text: "气到发抖，连夜写了一篇3000字的长文呼吁大家尊重真实形象。", scores: {drama:3, antihate:2, data:1} },
-      { text: "转发到粉丝群：'大家来看看原图，帮忙澄清一下吧！'", scores: {ctrl:3, data:2, antihate:1} }
+      { text: "关灯躺床上用手机把爱豆的采访、舞台、综艺从头刷到尾，天亮了。", scores: {data:3, loyal:2, face:1} },
+      { text: "反复循环一首歌，听到第37遍的时候突然哭了——也不知道为什么。", scores: {emo:3, spark:2, mom:1} },
+      { text: "疯狂截图存照片，第二天起来发现手机多了200多张图。", scores: {face:3, data:2, front:1} },
+      { text: "忍不住发了一条朋友圈/微博：'我好像入坑了……'", scores: {shill:3, drama:2, ctrl:1} }
     ]
   },
   {
-    q: "凌晨三点，你爱豆突然发了一条微博。你当时正在睡觉。",
+    q: "你第一次认真给爱豆做了一件事是什么？",
     opts: [
-      { text: "什么睡觉？我的微博提醒24小时开着，闹钟都没这个灵。", scores: {data:3, loyal:2, front:1} },
-      { text: "第二天醒来发现自己是第48573个点赞的，瞬间心态崩了。", scores: {data:2, emo:2, ctrl:1} },
-      { text: "睡醒看到了，点个赞，继续刷牙。", scores: {chill:3, sane:2, climb:1} },
-      { text: "秒醒！不仅点赞转发评论三连，还截图发群里喊姐妹们起来接驾。", scores: {ctrl:3, data:2, loyal:1} }
+      { text: "每天早起打卡签到，生怕少了一天影响爱豆的超话排名。", scores: {data:3, ctrl:2, loyal:1} },
+      { text: "精心写了一封很长很长的信，虽然知道大概率他/她看不到。", scores: {emo:3, mom:2, spark:1} },
+      { text: "把爱豆安利给了所有朋友，附带一份精心整理的入坑指南。", scores: {shill:3, ctrl:2, data:1} },
+      { text: "买了人生中第一张专辑/第一件周边，像收到了一份礼物。", scores: {krypton:3, loyal:2, front:1} }
     ]
   },
   {
-    q: "这个月的工资到账了。你打开购物车，发现爱豆代言的新品上架了。",
+    q: "入坑一个月后，你变成了什么样？",
     opts: [
-      { text: "买！买十件！自己用一件，剩下九件安利给全公司。", scores: {krypton:3, shill:2, loyal:1} },
-      { text: "先算一下这个月预算还剩多少……嗯，买一件意思一下吧。", scores: {krypton:3, emo:1, sane:1} },
-      { text: "看看就好，我追星但我不花钱——好吧我撒谎了，加购了。", scores: {chill:2, krypton:2, sane:1} },
-      { text: "不买。但我会默默收藏关注，在心里为爱豆加油就好。", scores: {data:3, ctrl:2, krypton:1} }
+      { text: "手机壁纸换了，歌单占领了，连做梦都是爱豆的脸。", scores: {spark:3, face:2, loyal:1} },
+      { text: "加了三个粉丝群，认识了一群志同道合的姐妹/兄弟。", scores: {ctrl:3, shill:2, data:1} },
+      { text: "变得更积极了——爱豆那么努力，我也不能摆烂。", scores: {sane:3, mom:2, loyal:1} },
+      { text: "朋友说我变了一个人，但我觉得是遇见了更好的自己。", scores: {emo:3, chill:2, climb:1} }
     ]
   },
   {
-    q: "你在路上偶遇了你的爱豆本人（不是做梦），你会？",
+    q: "有一天你刷到爱豆的一张素颜照/幕后花絮，发现和舞台上判若两人。",
     opts: [
-      { text: "大脑死机，嘴巴张开，发出海豚音，然后转身就跑——因为太紧张了。", scores: {spark:3, emo:2, face:1} },
-      { text: "冷静地远远拍一张，然后发超话：'今天运气用完了，出门遇到正主。'", scores: {front:3, sane:2, data:1} },
-      { text: "冲上去：'哥哥/姐姐你今天吃饭了吗？天冷了多穿点！这是我织的围巾！'", scores: {mom:3, front:2, loyal:1} },
-      { text: "假装没看到——因为我素颜出门了，不能让爱豆看到我最丑的样子。", scores: {face:3,spark:2, drama:1} }
+      { text: "无论什么样子都好看！！！存！！！素颜更真实更可爱！", scores: {face:3, spark:2, mom:1} },
+      { text: "心疼……幕后原来这么辛苦，我以后要更认真地支持他/她。", scores: {mom:3, emo:2, loyal:1} },
+      { text: "好真实啊，更喜欢了。比起完美人设，我更爱真实的他/她。", scores: {sane:3, chill:2, spark:1} },
+      { text: "截图分享到粉丝群，配文：'这也太可爱了吧救命！！！'", scores: {shill:3, ctrl:2, drama:1} }
     ]
   },
   {
-    q: "你的朋友说你爱豆'长得一般'。",
+    q: "第一次看到有人在网上说爱豆的坏话，你的反应是？",
     opts: [
-      { text: "当场拉黑，此人已从我的人生中物理删除。", scores: {focus:3, loyal:2, antihate:1} },
-      { text: "掏出手机翻了四十分钟的高清生图，直到对方被迫说'确实好看'。", scores: {shill:3, face:2, ctrl:1} },
-      { text: "微笑：'每个人审美不同嘛~'（回家后对着爱豆照片哭了两小时）", scores: {emo:3, chill:2,spark:1} },
-      { text: "无所谓，反正我追的是才华，不是脸。……好吧脸也追。", scores: {sane:2, face:2, chill:1} }
+      { text: "气到发抖！立刻用事实和截图礼貌但坚定地回复澄清。", scores: {antihate:3, ctrl:2, data:1} },
+      { text: "虽然生气，但忍住了。不想因为争论给爱豆招更多关注。", scores: {sane:3, chill:2, antihate:1} },
+      { text: "默默截图举报。能做的我都做了，但不会跟他们吵。", scores: {antihate:2, sane:2, mom:1} },
+      { text: "伤心多过愤怒……为什么有人要这样？他/她明明那么好。", scores: {emo:3, spark:2, loyal:1} }
     ]
   },
   {
-    q: "爱豆生日，你准备了一个月，终于轮到你送生日礼物了。你送什么？",
+    q: "入坑三个月了。你身边的人怎么看待你追星这件事？",
     opts: [
-      { text: "手写了一封12页的信+手工相册+编了一首歌——我就是爱豆的妈妈。", scores: {mom:3, loyal:2, emo:1} },
-      { text: "花了两周亲手做了一个手工相框——心意比金额重要。", scores: {krypton:3, sane:1, mom:1} },
-      { text: "联合几个好朋友一起录了一段创意祝福视频，剪辑了三天三夜。", scores: {data:3, krypton:2, ctrl:1} },
-      { text: "在超话发了一篇催泪小作文，阅读量比礼物重要。", scores: {drama:3, data:2, shill:1} }
+      { text: "朋友已被我成功安利，我们现在是追星搭子！", scores: {shill:3, ctrl:2, drama:1} },
+      { text: "家人和朋友完全不知道——我追星从来不让人发现。", scores: {chill:3, sane:2, face:1} },
+      { text: "朋友说我变开朗了、更有活力了，虽然他们不太理解。", scores: {emo:2, mom:2, loyal:1} },
+      { text: "已经被室友/同事吐槽了无数次'你又在刷爱豆了'。", scores: {data:3, front:2, krypton:1} }
+    ]
+  },
+  // ══════════════════════════════════════
+  // 第二幕：热恋 · 追星的日常（Q8-14）
+  // ══════════════════════════════════════
+  {
+    q: "凌晨两点，爱豆突然更新了一条动态。你当时正在睡觉。",
+    opts: [
+      { text: "什么睡觉？我的提醒24小时开着，闹钟都没这个灵。", scores: {data:3, loyal:2, front:1} },
+      { text: "第二天醒来发现自己是第48573个点赞的，有点遗憾但也开心。", scores: {data:2, emo:2, ctrl:1} },
+      { text: "睡醒看到了，点个赞，继续刷牙。追星也要好好休息嘛。", scores: {chill:3, sane:2, climb:1} },
+      { text: "秒醒！截图发群里喊姐妹们起来，然后留了一条走心评论。", scores: {ctrl:3, data:2, loyal:1} }
     ]
   },
   {
-    q: "你爱豆的对家（竞争对手）发了新歌，而且确实……还不错。",
+    q: "工资到账了。你打开手机，发现爱豆代言的新品上架了。",
     opts: [
-      { text: "好听也不能说好听！关闭页面，立刻去把自家哥哥/姐姐的歌多听几遍！", scores: {focus:3, data:2, loyal:1} },
-      { text: "偷偷听了三遍，加到了一个叫'不能让姐妹们知道'的歌单里。", scores: {climb:3, face:2, sane:1} },
-      { text: "客观评价：'确实不错，但我家的更好。'——然后被两边粉丝同时骂了。", scores: {sane:3, drama:1, antihate:1} },
-      { text: "内心挣扎了一下，然后默默打开自家的歌循环播放，好歌自己会说话。", scores: {antihate:3, ctrl:2,focus:1} }
+      { text: "买！再买几份安利给朋友，让他们也感受一下爱豆的品味。", scores: {krypton:3, shill:2, loyal:1} },
+      { text: "先算一下这个月预算……嗯，买一件意思一下，开心就好。", scores: {krypton:2, sane:2, emo:1} },
+      { text: "收藏了，暂时看看就好。追星也要理性消费呀。", scores: {chill:2, sane:3, climb:1} },
+      { text: "默默收藏关注，在心里为爱豆的事业发展加油就好。", scores: {data:3, ctrl:2, krypton:1} }
     ]
   },
   {
-    q: "你的爱豆在综艺上被剪辑成了'不合群''耍大牌'的样子。",
+    q: "爱豆生日到了！你准备了很久，打算怎么庆祝？",
     opts: [
-      { text: "通宵剪了一个澄清视频，配上完整未删减片段，发遍全网。", scores: {antihate:3, data:2, loyal:1} },
-      { text: "跑到节目组官博下留言表达不满，语气坚定但保持礼貌。", scores: {ctrl:3, antihate:2, drama:1} },
-      { text: "心疼到嚎啕大哭，发了一条只有自己能看到的朋友圈。", scores: {emo:3,spark:2, mom:1} },
-      { text: "算了，综艺剪辑都这样，翻篇吧。（打开爱豆的饭拍看了一百遍治愈自己）", scores: {chill:3, sane:2, face:1} }
-    ]
-  },
-  {
-    q: "粉丝群里突然有人说'我觉得XX（另一个爱豆）比咱家的好看'。",
-    opts: [
-      { text: "'哎呀，萝卜白菜各有所爱嘛，不过这里还是聊咱家的吧~'", scores: {focus:3, ctrl:2, antihate:1} },
-      { text: "沉默。心想：审美这件事，真的没法强求。", scores: {ctrl:3, drama:2, sane:1} },
-      { text: "发了一张爱豆的绝美生图，配文：'你再说一遍？'", scores: {face:3, shill:2, loyal:1} },
-      { text: "'哈哈确实也挺好看的~不过我还是最喜欢咱家的！'", scores: {chill:2, sane:2, climb:1} }
+      { text: "手写了一封12页的信+手工礼物，倾注了所有心意。", scores: {mom:3, loyal:2, emo:1} },
+      { text: "花两周亲手做了创意视频/绘画，用作品表达爱。", scores: {drama:3, data:2, krypton:1} },
+      { text: "和粉丝朋友们一起组织了一个线上庆生活动，超有仪式感！", scores: {ctrl:3, shill:2, data:1} },
+      { text: "在超话发了一篇催泪小作文，写完自己先哭了。", scores: {emo:3, spark:2, shill:1} }
     ]
   },
   {
     q: "你的手机相册里有多少张爱豆的照片？",
     opts: [
-      { text: "不到一百张。我比较克制，只存精选中的精选。", scores: {sane:3, chill:2, face:1} },
+      { text: "不到一百张。我只存精选中的精选，每一张都是艺术品。", scores: {sane:3, chill:2, face:1} },
       { text: "一千多张。按年份/活动/妆造/表情分了28个文件夹。", scores: {data:3, front:2, face:1} },
-      { text: "我不数了。上次清内存发现爱豆照片占了47G。", scores: {face:3, loyal:2, krypton:1} },
-      { text: "全是截图、官方物料、演出照——我不拍照，我只收藏。", scores: {front:3, data:2, ctrl:1} }
+      { text: "别问了。上次清内存发现爱豆照片占了47G。", scores: {face:3, loyal:2, krypton:1} },
+      { text: "大部分是官方物料和演出照——这些才是最珍贵的记录。", scores: {front:3, data:2, ctrl:1} }
     ]
   },
   {
-    q: "有人问你为什么追这个爱豆，你的回答是？",
+    q: "你的闺蜜/兄弟最近也开始追同一个爱豆了！",
     opts: [
-      { text: "'因为他/她的舞台表现力和作品质量是业内顶级的。'（准备了一份PPT）", scores: {shill:3, data:2, sane:1} },
-      { text: "'因为长得好看啊！！！你看这张！！！还有这张！！！'", scores: {face:3, shill:2,spark:1} },
-      { text: "'因为他/她让我觉得自己也可以变得更好。'（说着说着眼眶红了）", scores: {emo:3, mom:2, loyal:1} },
-      { text: "'说不清楚，反正就是喜欢，不接受反驳。'", scores: {loyal:3,focus:1, chill:1} }
+      { text: "太好了！！！终于有人懂我了！发你一个G的资源包！", scores: {shill:3, front:2, data:1} },
+      { text: "表面高兴，内心有种'我的秘密花园被发现了'的微妙感觉。", scores: {focus:2, spark:3, chill:1} },
+      { text: "立刻建了一个双人小群，从此每天有人一起分享日常了。", scores: {ctrl:3, shill:2, data:1} },
+      { text: "酷，又多一个人一起聊天了。来来来坐下，我给你讲讲历史。", scores: {sane:2, loyal:2, chill:1} }
     ]
   },
   {
-    q: "你爱豆突然宣布要去海外发展一段时间。",
+    q: "演唱会门票开售了！你疯狂抢票，但——没抢到。",
     opts: [
-      { text: "好难过。需要缓一缓，晚上回家好好消化一下这个消息。", scores: {emo:3,spark:2, loyal:1} },
-      { text: "马上关注爱豆的个人社交账号，继续默默支持，陪伴不变！", scores: {data:3, ctrl:2, loyal:1} },
-      { text: "虽然难过，但尊重他/她的选择。以后不管做什么我都支持。", scores: {mom:3, sane:2, chill:1} },
-      { text: "早就预感到了。我的下一个墙头已经在排队了。", scores: {climb:3, sane:1, chill:1} }
+      { text: "不放弃！疯狂蹲补票退票，这辈子一定要看一次现场！", scores: {krypton:3, loyal:2, front:1} },
+      { text: "在家嚎哭一小时，然后含泪蹲直播，弹幕里也要刷存在感。", scores: {emo:3, spark:2, drama:1} },
+      { text: "算了，这次没缘分。默默关掉页面，相信以后还有机会。", scores: {chill:2, sane:2, climb:1} },
+      { text: "秒开各种渠道发求购帖，同时在十五个粉丝群问有没有转让的。", scores: {ctrl:3, data:2, front:1} }
     ]
   },
   {
-    q: "你的闺蜜/兄弟开始追跟你同一个爱豆了。你的反应是？",
+    q: "有人问你：'追了这么久，到底是什么让你一直喜欢他/她？'",
     opts: [
-      { text: "太好了！！！终于有人能跟我24小时讨论了！发你一个G的资源包！", scores: {shill:3, front:2, data:1} },
-      { text: "表面高兴，内心莫名紧张——以后粉丝群里又多了个跟我抢前排的人。", scores: {focus:2,spark:3, ctrl:1} },
-      { text: "立刻建了一个二人小群，每天定时分享好看的照片和有趣的视频。", scores: {ctrl:3, shill:2, data:1} },
-      { text: "酷，又多一个人一起聊天了。", scores: {data:2, sane:2, chill:1} }
+      { text: "'因为他/她的舞台和作品，是能让我起鸡皮疙瘩的那种好。'", scores: {shill:3, data:2, sane:1} },
+      { text: "'因为他/她让我觉得，自己也可以变得更好。'（说着眼眶红了）", scores: {emo:3, mom:2, loyal:1} },
+      { text: "'说不清楚。就是喜欢，不接受反驳，也不需要理由。'", scores: {loyal:3, focus:2, chill:1} },
+      { text: "'因为好看啊！！！你看这个角度！！！还有这张！！！'", scores: {face:3, shill:2, spark:1} }
+    ]
+  },
+  // ══════════════════════════════════════
+  // 第三幕：考验 · 爱的证明（Q15-20）
+  // ══════════════════════════════════════
+  {
+    q: "爱豆突然换了一个完全不同的风格，粉丝群里议论纷纷。",
+    opts: [
+      { text: "反复听了十遍新歌，从不习惯到上头——果然还是相信他/她的选择。", scores: {spark:3, loyal:2, sane:1} },
+      { text: "在超话发了一篇'给新风格一点时间'的长文，呼吁大家多点耐心。", scores: {sane:3, ctrl:2, antihate:1} },
+      { text: "不管什么风格我都支持！第一时间冲去评论区刷正面反馈。", scores: {ctrl:3, data:2, focus:1} },
+      { text: "风格变了？无所谓，我喜欢的是这个人，不是某种风格。", scores: {chill:3, loyal:2, climb:1} }
     ]
   },
   {
-    q: "爱豆的演唱会门票开售了，但你手速不够没抢到。",
+    q: "你追了很久的爱豆最近遇到了事业低谷期，新作品反响平平。",
     opts: [
-      { text: "疯狂在官方渠道蹲补票、退票，钱没了可以再赚，演唱会只有一次！", scores: {krypton:3, loyal:2, front:1} },
-      { text: "在家嚎哭一小时，然后蹲在场馆门口听漏出来的声音也好。", scores: {emo:3,spark:2, front:1} },
-      { text: "算了，在家看直播也一样……才怪！！！明年我要开四台手机抢！", scores: {drama:2, data:2, krypton:1} },
-      { text: "秒开二手平台挂求购帖，同时在十五个粉丝群发'有转让的吗？！'", scores: {ctrl:3, data:2, front:1} }
+      { text: "正是这种时候，才更要让他/她知道我们一直都在。加倍支持！", scores: {loyal:3, data:2, focus:1} },
+      { text: "虽然难过，但我相信低谷是暂时的。陪他/她一起等春天。", scores: {mom:3, emo:2, loyal:1} },
+      { text: "作品不够好可以进步，但我追的是这个人本身。不离不弃。", scores: {sane:2, chill:2, mom:1} },
+      { text: "有点失落，默默减少了关注频率……但还是会偷偷关注。", scores: {climb:3, sane:2, chill:1} }
     ]
   },
   {
-    q: "你发现有个私生饭长期跟踪你的爱豆，偷拍日常。",
+    q: "有人当面嘲笑你：'追星有什么用？那个人又不认识你。'",
     opts: [
-      { text: "报警+联系工作室+提醒身边粉丝朋友注意保护爱豆隐私。", scores: {antihate:3, ctrl:2, sane:1} },
-      { text: "虽然照片很清晰……但绝对不能因为图好看就纵容！坚决抵制私生！", scores: {face:3, climb:2, drama:1} },
-      { text: "气到血压飙升，连续三天在各平台举报私生账号，一个都不放过。", scores: {antihate:2, drama:3,focus:1} },
-      { text: "心疼爱豆。默默在小号写了一篇'请给他/她私人空间'的呼吁文。", scores: {mom:3, emo:2, sane:1} }
+      { text: "笑了。他/她给我的快乐和力量，你这辈子都不会懂。", scores: {sane:3, loyal:2, drama:1} },
+      { text: "虽然嘴上没说什么，但回家后对着爱豆的照片哭了——他们不懂。", scores: {emo:3, spark:2, mom:1} },
+      { text: "无视。跟不追星的人解释追星，就像跟鱼解释天空。", scores: {chill:3, sane:2, focus:1} },
+      { text: "反手给对方看了一段爱豆最精彩的表演，企图现场安利。", scores: {shill:3, face:2, data:1} }
     ]
   },
   {
-    q: "你的爱豆突然换了一个完全不同的音乐风格，粉丝群里议论纷纷。",
+    q: "爱豆在综艺上被剪辑成了'不合群'的样子，评论区充斥误解。",
     opts: [
-      { text: "反复听了十遍新歌，从抗拒到接受，最后发现还挺上头的。", scores: {spark:3, ctrl:2, drama:1} },
-      { text: "在超话发了一篇'给新风格一点时间，相信他/她的选择'的长文。", scores: {sane:3, ctrl:2, chill:1} },
-      { text: "跑到新歌评论区刷了一排爱心，不管什么风格我都支持！", scores: {ctrl:3, data:2,focus:1} },
-      { text: "风格变了？无所谓，反正喜欢的是这个人。（点开外卖APP自我安慰）", scores: {chill:3, emo:1, climb:1} }
+      { text: "通宵找完整片段剪了澄清视频，用事实说话。", scores: {antihate:3, data:2, loyal:1} },
+      { text: "跑到节目组官博下留言表达不满，语气坚定但保持礼貌。", scores: {ctrl:3, antihate:2, drama:1} },
+      { text: "心疼到说不出话，发了一条只有自己能看到的朋友圈。", scores: {emo:3, spark:2, mom:1} },
+      { text: "算了，综艺剪辑都这样。打开爱豆的作品治愈自己。", scores: {chill:3, sane:2, face:1} }
     ]
   },
   {
-    q: "你追了三年的爱豆最近作品质量明显下滑，你会？",
+    q: "有人在粉丝群里说想跟踪爱豆的行程，拍私人日常照。你怎么看？",
     opts: [
-      { text: "依然支持！虽然有点失落，但相信他/她会越来越好的！", scores: {loyal:3, data:2,focus:1} },
-      { text: "在超话婉转地提了一嘴'希望团队能用点心'，被粉丝围攻了。", scores: {sane:3, drama:2, antihate:1} },
-      { text: "难过。但我追的是这个人，不是作品。陪他/她一起成长。", scores: {mom:3, emo:2, loyal:1} },
-      { text: "悄悄减少了关注频率，把多出来的时间分给了其他兴趣。", scores: {climb:3, sane:2, chill:1} }
+      { text: "立刻制止！这是侵犯隐私，真正的喜欢是尊重边界。", scores: {antihate:3, sane:2, ctrl:1} },
+      { text: "虽然也想看更多日常……但绝对不能纵容！坚决反对。", scores: {face:2, antihate:2, sane:1} },
+      { text: "耐心给对方讲道理：'保护爱豆的私人空间，才是真正的爱。'", scores: {mom:3, ctrl:2, sane:1} },
+      { text: "默默举报+退群。这种行为让我很不舒服。", scores: {chill:2, antihate:2, focus:1} }
     ]
   },
   {
-    q: "有人嘲笑你追星是'把钱和时间浪费在一个不认识你的人身上'。",
+    q: "最后一题：如果可以对爱豆说一句话，你最想说什么？",
     opts: [
-      { text: "笑了。我追星赚的快乐比你一辈子赚的都多，你管得着吗？", scores: {sane:3, loyal:2, drama:1} },
-      { text: "委屈到哭。他们不懂追星带给我的力量和意义。", scores: {emo:3,spark:2, mom:1} },
-      { text: "无视。跟不追星的人解释追星，等于跟鱼解释爬树。", scores: {chill:3, sane:2,focus:1} },
-      { text: "反手给对方做了一个安利PPT，企图把对方也拉下水。", scores: {shill:3, ctrl:2, data:1} }
-    ]
-  },
-  {
-    q: "最后一题：你觉得你和爱豆之间的关系，最像什么？",
-    opts: [
-      { text: "我是他/她的远房老母亲，一直默默牵挂着。", scores: {mom:3, emo:2, loyal:1} },
-      { text: "我是他/她的编外小助手，行程、作品、新动态我全关注。", scores: {data:3, ctrl:2, antihate:1} },
-      { text: "我是他/她不知道存在的灵魂伴侣——单方面的。", scores: {spark:3, emo:2, face:1} },
-      { text: "我是一只在花丛中飞来飞去的蜜蜂——今天采这朵，明天采那朵。", scores: {climb:3, chill:2, sane:1} }
+      { text: "'谢谢你存在。因为你，我的生活多了很多光。'", scores: {emo:3, spark:2, loyal:1} },
+      { text: "'好好吃饭好好睡觉，别太累了。有我们在呢。'", scores: {mom:3, chill:2, loyal:1} },
+      { text: "'你只管往前走，身后的事情交给我们。'", scores: {ctrl:3, antihate:2, data:1} },
+      { text: "'不用认识我也没关系，知道你过得好就够了。'", scores: {sane:2, chill:2, emo:2} }
     ]
   }
 ];
@@ -675,7 +684,9 @@ const results = [
 // ========== 测试逻辑 ==========
 let currentQ = 0;
 let playerName = '';
-const sceneNames = ["深夜微博事件","舆论风暴","凌晨三点","钱包危机","命运邂逅","审美之战","生日企划","对手新歌","剪辑风波","群聊名场面","手机考古","灵魂拷问","告别时刻","友谊试炼","演唱会争夺","隐私保卫战","风格突变","作品争议","追星质疑","终极关系"];
+const sceneNames = ["命运的相遇","入坑之夜","第一次付出","蜕变的自己","真实的模样","第一场守护","入坑三个月","深夜的惊喜","钱包的考验","生日的心意","手机里的宝藏","追星搭子","抢票大战","追星的理由","风格的转变","低谷的陪伴","外界的质疑","剪辑的误解","隐私的底线","想对你说"];
+const actTitles = ["第一幕 · 入坑 · 心动的开始","第二幕 · 热恋 · 追星的日常","第三幕 · 考验 · 爱的证明"];
+const actBreaks = [0, 7, 14]; // 每幕起始题号
 let answers = [];
 
 function showPage(id) {
@@ -703,7 +714,7 @@ function startTest() {
   // 过渡动画
   const overlay = document.getElementById('transition-overlay');
   const tt = document.getElementById('transition-text');
-  tt.textContent = playerName + '\uff0c\u6b63\u5728\u521d\u59cb\u5316\u4f60\u7684\u8ffd\u661f\u7075\u9b42\u6863\u6848\u2026';
+  tt.innerHTML = '<div style="font-size:10px;letter-spacing:4px;color:rgba(168,85,247,0.6);margin-bottom:12px;">ACT I</div><div style="font-size:18px;color:rgba(255,255,255,0.7);">入坑 · 心动的开始</div><div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;">' + playerName + '，让我们回到一切开始的地方</div>';
   overlay.classList.add('show');
   setTimeout(()=>{ overlay.classList.remove('show'); showPage('page-test'); renderQuestion(); }, 1200);
 }
@@ -714,7 +725,11 @@ function renderQuestion() {
   document.getElementById('progress').style.width = ((currentQ+1)/questions.length*100)+'%';
   document.getElementById('progress-text').textContent = `${currentQ+1} / ${questions.length}`;
   const prev = answers[currentQ];
-  let html = `<div class="question-card"><div class="scene-tag">SCENE ${String(currentQ+1).padStart(2,'0')}</div><div class="scene-title">${sceneNames[currentQ] || ''}</div><div class="question-text">${playerName}\uff0c${q.q}</div>`;
+  // 判断当前幕
+  const actIdx = currentQ < 7 ? 0 : (currentQ < 14 ? 1 : 2);
+  const actLabel = ['ACT I','ACT II','ACT III'][actIdx];
+  const actSub = ['入坑 · 心动的开始','热恋 · 追星的日常','考验 · 爱的证明'][actIdx];
+  let html = `<div class="question-card"><div class="scene-tag">${actLabel} · SCENE ${String(currentQ+1).padStart(2,'0')}</div><div class="scene-title">${actSub} — ${sceneNames[currentQ] || ''}</div><div class="question-text">${playerName}\uff0c${q.q}</div>`;
   q.opts.forEach((o,i) => {
     html += `<button class="option${i===prev?' selected':''}" data-idx="${i}">${o.text}</button>`;
   });
@@ -731,22 +746,17 @@ function selectOption(idx) {
   answers[currentQ] = idx;
   currentQ++;
   if(currentQ < questions.length) {
-    // 中场提示（第10题后）
-    if(currentQ === 10) {
-      const toast = document.createElement('div');
-      toast.className = 'midway-toast';
-      toast.textContent = playerName + ' \u7684\u8ffd\u661f\u7075\u9b42\u6b63\u5728\u88ab\u89e3\u6790\u2026';
-      document.body.appendChild(toast);
-      setTimeout(()=>toast.remove(), 2200);
-    }
-    // 每5题一次短暂过渡
-    if(currentQ % 5 === 0 && currentQ < questions.length) {
+    // 幕间过渡（Q7进入第二幕，Q14进入第三幕）
+    if(currentQ === 7 || currentQ === 14) {
       const overlay = document.getElementById('transition-overlay');
       const tt = document.getElementById('transition-text');
-      const msgs = ['\u7075\u9b42\u6570\u636e\u6536\u96c6\u4e2d\u2026','\u4eba\u683c\u77e9\u9635\u8fd0\u7b97\u4e2d\u2026','\u6700\u7ec8\u5206\u6790\u5373\u5c06\u5f00\u59cb\u2026'];
-      tt.textContent = msgs[Math.floor(currentQ/5)-1] || '\u5206\u6790\u4e2d\u2026';
+      if(currentQ === 7) {
+        tt.innerHTML = '<div style="font-size:10px;letter-spacing:4px;color:rgba(168,85,247,0.6);margin-bottom:12px;">ACT II</div><div style="font-size:18px;color:rgba(255,255,255,0.7);">热恋 · 追星的日常</div><div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;">' + playerName + '，你的追星旅程正式开始了</div>';
+      } else {
+        tt.innerHTML = '<div style="font-size:10px;letter-spacing:4px;color:rgba(168,85,247,0.6);margin-bottom:12px;">ACT III</div><div style="font-size:18px;color:rgba(255,255,255,0.7);">考验 · 爱的证明</div><div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;">真正的喜欢，是经得起考验的</div>';
+      }
       overlay.classList.add('show');
-      setTimeout(()=>{ overlay.classList.remove('show'); renderQuestion(); }, 600);
+      setTimeout(()=>{ overlay.classList.remove('show'); renderQuestion(); }, 1500);
     } else {
       renderQuestion();
     }
@@ -1089,10 +1099,10 @@ function doDrawPoster(r, scores, avatarImg) {
     ctx.font='400 18px '+F; ctx.fillStyle='rgba(255,255,255,0.35)';
     ctx.fillText('\u626b\u7801\u6216\u957f\u6309\u8bc6\u522b \u00b7 \u9080\u8bf7\u670b\u53cb\u4e00\u8d77\u6d4b\u8bd5', pad, qY+90);
 
-    const lH=20, lW=lH*(logoImg.naturalWidth/logoImg.naturalHeight);
-    ctx.drawImage(logoImg, pad, H-32, lW, lH);
-    ctx.textAlign='right'; ctx.font='400 14px '+F; ctx.fillStyle='rgba(255,255,255,0.12)';
-    ctx.fillText('FSTI \u00b7 \u4ec5\u4f9b\u5a31\u4e50\uff0c\u5021\u5bfc\u7406\u6027\u8ffd\u661f', W-pad, H-16);
+    const lH=80, lW=lH*(logoImg.naturalWidth/logoImg.naturalHeight);
+    ctx.drawImage(logoImg, pad, H-92, lW, lH);
+    ctx.textAlign='right'; ctx.font='400 13px '+F; ctx.fillStyle='rgba(255,255,255,0.15)';
+    ctx.fillText('FSTI \u00b7 \u4ec5\u4f9b\u5a31\u4e50\uff0c\u5021\u5bfc\u7406\u6027\u8ffd\u661f', W-pad, H-42);
 
     document.getElementById('poster-overlay').classList.add('show');
   }
